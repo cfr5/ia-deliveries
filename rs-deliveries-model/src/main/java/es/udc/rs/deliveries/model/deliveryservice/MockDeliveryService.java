@@ -54,7 +54,8 @@ public class MockDeliveryService implements DeliveryService {
 	}
 
 	@Override
-	public Customer addCustomer(Customer customer) throws InputValidationException {
+	public Customer addCustomer(String name, String cif, String address) throws InputValidationException {
+		Customer customer = new Customer(0l, name, cif, address,Calendar.getInstance() );
 		validateCustomer(customer);
 		customer.setCustomerId(getNextCustomertId());
 		customersMap.put(customer.getCustomerId(), customer);
@@ -62,7 +63,7 @@ public class MockDeliveryService implements DeliveryService {
 	}
 
 	@Override
-	public Customer updateCustomer(Customer customer) throws InputValidationException, InstanceNotFoundException {
+	public Customer updateCustomer(Long customerId,String name, String cif, String address) throws InputValidationException, InstanceNotFoundException {
 		if (!customersMap.containsKey(customer.getCustomerId())){
 			throw new InstanceNotFoundException(customer.getCustomerId(), Customer.class.getName());
 		}
@@ -103,7 +104,7 @@ public class MockDeliveryService implements DeliveryService {
 	}
 
 	@Override
-	public Shipment addShipment(Shipment shipment) throws InputValidationException {
+	public Shipment addShipment(Long customerId,Long packageReference,String address) throws InputValidationException {
 		// TODO Auto-generated method stub
 		return null;
 	}
