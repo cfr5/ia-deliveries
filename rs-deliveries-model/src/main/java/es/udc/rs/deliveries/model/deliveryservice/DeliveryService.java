@@ -17,9 +17,9 @@ public interface DeliveryService {
 	public Customer updateCustomer(Long customerId, String name, String cif, String address)
 			throws InputValidationException, InstanceNotFoundException;
 
-	public void removeCustomer(Long customerId) throws InstanceNotFoundException;
+	public void removeCustomer(Long customerId) throws InstanceNotFoundException, InputValidationException;
 
-	public Customer findCustomerById(Long customerId) throws InstanceNotFoundException;
+	public Customer findCustomerById(Long customerId) throws InstanceNotFoundException, InputValidationException;
 
 	public List<Customer> findCustomersByName(String keywords) throws InputValidationException;
 

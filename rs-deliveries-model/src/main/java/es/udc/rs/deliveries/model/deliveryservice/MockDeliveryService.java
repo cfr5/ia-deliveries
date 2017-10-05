@@ -35,30 +35,13 @@ public class MockDeliveryService implements DeliveryService {
 		return ++lastShippingId;
 	}
 
-	private static void validateCustomer(Customer customer) throws InputValidationException {
-		PropertyValidator.validateLong("CustomerId", customer.getCustomerId(), MININT, MAXINT);
-		PropertyValidator.validateMandatoryString("Name", customer.getName());
-		PropertyValidator.validateMandatoryString("Cif", customer.getCif());
-		PropertyValidator.validateMandatoryString("address", customer.getCif());
-		PropertyValidator.validatePastDate("creationDate", customer.getCreationDate());
-
-	}
-
-	private static void validateShipment(Shipment shipment) throws InputValidationException {
-		PropertyValidator.validateLong("shipmentId", shipment.getShipmentId(), MININT, MAXINT);
-		PropertyValidator.validateLong("CustomerId", shipment.getCustomerId(), MININT, MAXINT);
-		PropertyValidator.validateLong("packageReference", shipment.getCustomerId(), MININT, MAXINT);
-		PropertyValidator.validateMandatoryString("address", shipment.getAddress());
-		// state;
-		PropertyValidator.validatePastDate("creationDate", shipment.getCreationDate());
-		// maxDeliveryDate;
-		// deliveryDate;
-	}
-
 	@Override
 	public Customer addCustomer(String name, String cif, String address) throws InputValidationException {
+
 		Customer customer = new Customer(0l, name, cif, address, Calendar.getInstance());
-		validateCustomer(customer);
+		PropertyValidator.validateMandatoryString("name", name);
+		PropertyValidator.validateMandatoryString("cif", cif);
+		PropertyValidator.validateMandatoryString("address", address);
 		customer.setCustomerId(getNextCustomertId());
 		customersMap.put(customer.getCustomerId(), customer);
 		return customer;
@@ -66,18 +49,36 @@ public class MockDeliveryService implements DeliveryService {
 
 	@Override
 	public Customer updateCustomer(Long customerId, String name, String cif, String address)
-			throws InputValidationException, InstanceNotFoundException {
-		if (!customersMap.containsKey(customer.getCustomerId())) {
-			throw new InstanceNotFoundException(customer.getCustomerId(), Customer.class.getName());
+			throws InstanceNotFoundException, InputValidationException {
+
+		PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
+		if (!customersMap.containsKey(customerId)) {
+			throw new InstanceNotFoundException(customerId, Customer.class.getName());
 		}
-		validateCustomer(customer);
+		Customer customer = customersMap.get(customerId);
+		try {
+			PropertyValidator.validateMandatoryString("name", name);
+			customer.setName(name);
+		} catch (InputValidationException e) {
+		}
+		try {
+			PropertyValidator.validateMandatoryString("cif", cif);
+			customer.setCif(cif);
+		} catch (InputValidationException e) {
+		}
+		try {
+			PropertyValidator.validateMandatoryString("address", address);
+			customer.setAddress(address);
+		} catch (InputValidationException e) {
+		}
 		customersMap.put(customer.getCustomerId(), customer);
 
 		return customer;
 	}
 
 	@Override
-	public void removeCustomer(Long customerId) throws InstanceNotFoundException {
+	public void removeCustomer(Long customerId) throws InstanceNotFoundException, InputValidationException {
+		PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
 		Customer customer = customersMap.remove(customerId);
 		if (customer == null) {
 			throw new InstanceNotFoundException(customerId, Customer.class.getName());
@@ -85,7 +86,8 @@ public class MockDeliveryService implements DeliveryService {
 	}
 
 	@Override
-	public Customer findCustomerById(Long customerId) throws InstanceNotFoundException {
+	public Customer findCustomerById(Long customerId) throws InstanceNotFoundException, InputValidationException {
+		PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
 		Customer customer = customersMap.get(customerId);
 		if (customer == null) {
 			throw new InstanceNotFoundException(customerId, Customer.class.getName());
@@ -183,7 +185,7 @@ public class MockDeliveryService implements DeliveryService {
 
 	@Override
 	public Shipment findShipmentById(Long shipmentId) throws InputValidationException, InstanceNotFoundException {
-		
+
 		PropertyValidator.validateLong("shipmentId", shipmentId, MININT, MAXINT);
 
 		Shipment shipment = shipmentsMap.get(shipmentId);
@@ -197,16 +199,16 @@ public class MockDeliveryService implements DeliveryService {
 	@Override
 	public List<Shipment> findShipmentsByCustomer(Long customerId, Long start, Long count)
 			throws InputValidationException {
-		
+
 		PropertyValidator.validateLong("shipmentId", customerId, MININT, MAXINT);
 		PropertyValidator.validateLong("start", start, MININT, MAXINT);
 		PropertyValidator.validateLong("count", count, MININT, MAXINT);
 
 		List<Shipment> shipments = shipmentsByUserMap.get(customerId);
-		
+
 		if (shipments == null)
 			return new ArrayList<>();
-		
+
 		return shipments;
 	}
 
