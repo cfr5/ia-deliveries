@@ -31,6 +31,13 @@ public class MockDeliveryServiceTest {
 	}
 	
 	@Test(expected = InputValidationException.class)
+	public void testAddCustomerWithEmptyName() throws InputValidationException{
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer("", "CIF", "address");
+		
+	}
+	
+	@Test(expected = InputValidationException.class)
 	public void testAddCustomerWithInvalidCIF() throws InputValidationException{
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer("Name", null, "address");
@@ -60,10 +67,14 @@ public class MockDeliveryServiceTest {
 		
 	}
 	
+	
 	@Test (expected = InstanceNotFoundException.class)
-	public void testNotFindCustomer() throws InstanceNotFoundException, InputValidationException{
+	public void testCustomerNotFound() throws InstanceNotFoundException, InputValidationException{
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
-		deliveryService.findCustomerById(97979797l);
+		//Customer customer = deliveryService.findCustomerById(1l);
+		//System.out.println(customer.getName());
+		deliveryService.findCustomerById(999999l);
+		
 	}
 	
 	@Test
