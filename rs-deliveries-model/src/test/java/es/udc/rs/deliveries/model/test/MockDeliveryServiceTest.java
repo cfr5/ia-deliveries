@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import es.udc.rs.deliveries.exceptions.CustomerWithShipmentsException;
 import es.udc.rs.deliveries.exceptions.InputValidationException;
 import es.udc.rs.deliveries.exceptions.InstanceNotFoundException;
 import es.udc.rs.deliveries.exceptions.ShipmentNotPendingException;
@@ -22,49 +23,62 @@ import es.udc.rs.deliveries.model.shipment.ShipmentState;
 public class MockDeliveryServiceTest {
 
 	@Test
-	public void testAddAndFindCustormer(){
+	public void testAddAndFindCustormer() throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException{
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
-		
-		try {
-			Customer customer = deliveryService.addCustomer(name, cif, address);
-			Customer customerfound = deliveryService.findCustomerById(customer.getCustomerId());
-			assertEquals(customer,customerfound);
+		Customer customer = deliveryService.addCustomer(name, cif, address);
+		Customer customerfound = deliveryService.findCustomerById(customer.getCustomerId());
+		assertEquals(customer,customerfound);
+		deliveryService.removeCustomer(customer.getCustomerId());
 			
-		} catch (InputValidationException | InstanceNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		
 	}
 	
+	@Test(expected = InputValidationException.class)
+	public void testAddCustomerWithInvalidName() throws InputValidationException{
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer(null, "CIF", "address");
+		
+	}
+	
+	@Test(expected = InputValidationException.class)
+	public void testAddCustomerWithInvalidCIF() throws InputValidationException{
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer("Name", null, "address");
+		
+	}
+	
+	@Test(expected = InputValidationException.class)
+	public void testAddCustomerWithInvalidAddress() throws InputValidationException{
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer("Name", "CIF", null);
+		
+	}
+	
+	
+	
 	@Test
-	public void testFindCustomerByKeyword(){
+	public void testFindCustomerByKeyword() throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException{
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
-		
-		try {
-			Customer customer = deliveryService.addCustomer(name, cif, address);
-			List<Customer> customersfound = deliveryService.findCustomersByName("coyote");
-			List<Customer> customersnotfound = deliveryService.findCustomersByName("correcaminos");
-			assertTrue(customersfound.contains(customer));
-			assertTrue(customersnotfound.isEmpty());
-		} catch (InputValidationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Customer customer = deliveryService.addCustomer(name, cif, address);
+		List<Customer> customersfound = deliveryService.findCustomersByName("coyote");
+		List<Customer> customersnotfound = deliveryService.findCustomersByName("correcaminos");
+		assertTrue(customersfound.contains(customer));
+		assertTrue(customersnotfound.isEmpty());
+		deliveryService.removeCustomer(customer.getCustomerId());
 		
 	}
 
 	
 	
 	@Test
-	public void testAddAndFindShipment() throws InputValidationException, InstanceNotFoundException{
+	public void testAddAndFindShipment() throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException{
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		
 		Customer customer = deliveryService.addCustomer("Pepito","00000000", "direccion");
@@ -84,7 +98,7 @@ public class MockDeliveryServiceTest {
 	}
 	
 	@Test(expected = InputValidationException.class)
-	public void testAddShipmentWithInvalidPackageReference() throws InputValidationException, InstanceNotFoundException{
+	public void testAddShipmentWithInvalidPackageReference() throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException{
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		
 		Customer customer = deliveryService.addCustomer("Pepito","00000000", "direccion");
@@ -95,7 +109,7 @@ public class MockDeliveryServiceTest {
 	}
 	
 	@Test(expected = InputValidationException.class)
-	public void testAddShipmentWithInvalidAddress() throws InputValidationException, InstanceNotFoundException{
+	public void testAddShipmentWithInvalidAddress() throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException{
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		
 		Customer customer = deliveryService.addCustomer("Pepito","00000000", "direccion");
@@ -119,7 +133,7 @@ public class MockDeliveryServiceTest {
 	}
 	
 	@Test(expected = ShipmentNotPendingException.class)
-	public void testCancelShipment() throws InputValidationException, InstanceNotFoundException, ShipmentNotPendingException{
+	public void testCancelShipment() throws InputValidationException, InstanceNotFoundException, ShipmentNotPendingException, CustomerWithShipmentsException{
 		Shipment shipment = addValidShipment();
 		
 		assertEquals(shipment.getState(), ShipmentState.PENDING);

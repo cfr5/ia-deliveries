@@ -2,6 +2,7 @@ package es.udc.rs.deliveries.model.deliveryservice;
 
 import java.util.List;
 
+import es.udc.rs.deliveries.exceptions.CustomerWithShipmentsException;
 import es.udc.rs.deliveries.exceptions.InputValidationException;
 import es.udc.rs.deliveries.exceptions.InstanceNotFoundException;
 import es.udc.rs.deliveries.exceptions.InvalidStateException;
@@ -17,7 +18,7 @@ public interface DeliveryService {
 	public Customer updateCustomer(Long customerId, String name, String cif, String address)
 			throws InputValidationException, InstanceNotFoundException;
 
-	public void removeCustomer(Long customerId) throws InstanceNotFoundException, InputValidationException;
+	public void removeCustomer(Long customerId) throws InstanceNotFoundException, InputValidationException, CustomerWithShipmentsException;
 
 	public Customer findCustomerById(Long customerId) throws InstanceNotFoundException, InputValidationException;
 

@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import es.udc.rs.deliveries.exceptions.CustomerWithShipmentsException;
 import es.udc.rs.deliveries.exceptions.InputValidationException;
 import es.udc.rs.deliveries.exceptions.InstanceNotFoundException;
 import es.udc.rs.deliveries.exceptions.InvalidStateException;
@@ -77,11 +78,15 @@ public class MockDeliveryService implements DeliveryService {
 	}
 
 	@Override
-	public void removeCustomer(Long customerId) throws InstanceNotFoundException, InputValidationException {
+	public void removeCustomer(Long customerId) throws InstanceNotFoundException, InputValidationException, CustomerWithShipmentsException {
 		PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
-		Customer customer = customersMap.remove(customerId);
-		if (customer == null) {
-			throw new InstanceNotFoundException(customerId, Customer.class.getName());
+		if (!shipmentsByUserMap.containsKey(customerId)){
+			Customer customer = customersMap.remove(customerId);
+			if (customer == null) {
+				throw new InstanceNotFoundException(customerId, Customer.class.getName());
+			}
+		} else {
+			throw new CustomerWithShipmentsException(customerId);			
 		}
 	}
 
