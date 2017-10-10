@@ -1,6 +1,10 @@
 package es.udc.rs.deliveries.model.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,6 +35,25 @@ public class MockDeliveryServiceTest {
 			e.printStackTrace();
 		}
 		
+		
+	}
+	@Test
+	public void testFindCustomerByKeyword(){
+		String name = "Coyote";
+		String cif = "CIFCoyote";
+		String address = "Canyon Colorado";
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		
+		try {
+			Customer customer = deliveryService.addCustomer(name, cif, address);
+			List<Customer> customersfound = deliveryService.findCustomersByName("coyote");
+			List<Customer> customersnotfound = deliveryService.findCustomersByName("correcaminos");
+			assertTrue(customersfound.contains(customer));
+			assertTrue(customersnotfound.isEmpty());
+		} catch (InputValidationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }
