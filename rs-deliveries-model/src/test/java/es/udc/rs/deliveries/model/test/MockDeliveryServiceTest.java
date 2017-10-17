@@ -45,9 +45,23 @@ public class MockDeliveryServiceTest {
 	}
 	
 	@Test(expected = InputValidationException.class)
+	public void testAddCustomerWithEmptyCIF() throws InputValidationException{
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer("Name", "", "address");
+		
+	}
+	
+	@Test(expected = InputValidationException.class)
 	public void testAddCustomerWithInvalidAddress() throws InputValidationException{
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer("Name", "CIF", null);
+		
+	}
+	
+	@Test(expected = InputValidationException.class)
+	public void testAddCustomerWithEmptyAddress() throws InputValidationException{
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer("Name", "CIF", "");
 		
 	}
 	
