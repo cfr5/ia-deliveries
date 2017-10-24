@@ -52,8 +52,11 @@ public class MockDeliveryService implements DeliveryService {
 	public Customer updateCustomer(Long customerId, String name, String cif, String address)
 			throws InstanceNotFoundException, InputValidationException {
 
-		PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
-		if (!customersMap.containsKey(customerId)) {
+		if (customerId != null){
+			PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
+		} else {
+			throw new InputValidationException("customerId cannot be null");
+		}		if (!customersMap.containsKey(customerId)) {
 			throw new InstanceNotFoundException(customerId, Customer.class.getName());
 		}
 		Customer customer = customersMap.get(customerId);
@@ -79,7 +82,11 @@ public class MockDeliveryService implements DeliveryService {
 
 	@Override
 	public void removeCustomer(Long customerId) throws InstanceNotFoundException, InputValidationException, CustomerWithShipmentsException {
-		PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
+		if (customerId != null){
+			PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
+		} else {
+			throw new InputValidationException("customerId cannot be null");
+		}		
 		if (!shipmentsByUserMap.containsKey(customerId)){
 			Customer customer = customersMap.remove(customerId);
 			if (customer == null) {
@@ -92,7 +99,11 @@ public class MockDeliveryService implements DeliveryService {
 
 	@Override
 	public Customer findCustomerById(Long customerId) throws InstanceNotFoundException, InputValidationException {
-		PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
+		if (customerId != null){
+			PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
+		} else {
+			throw new InputValidationException("customerId cannot be null");
+		}
 		Customer customer = customersMap.get(customerId);
 		if (customer == null) {
 			throw new InstanceNotFoundException(customerId, Customer.class.getName());
