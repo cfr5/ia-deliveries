@@ -51,29 +51,31 @@ public class MockDeliveryService implements DeliveryService {
 	@Override
 	public Customer updateCustomer(Long customerId, String name, String cif, String address)
 			throws InstanceNotFoundException, InputValidationException {
-
+		
 		if (customerId != null){
 			PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
 		} else {
 			throw new InputValidationException("customerId cannot be null");
-		}		if (!customersMap.containsKey(customerId)) {
+		}		
+		if ((name==null)&&(cif == null) && (address == null)){
+			throw new InputValidationException("All values can't be null");
+		}
+		
+		Customer customer = customersMap.get(customerId);
+		if (customer == null) {
 			throw new InstanceNotFoundException(customerId, Customer.class.getName());
 		}
-		Customer customer = customersMap.get(customerId);
-		try {
+		if (name != null) {
 			PropertyValidator.validateMandatoryString("name", name);
 			customer.setName(name);
-		} catch (InputValidationException e) {
 		}
-		try {
+		if (cif != null) {
 			PropertyValidator.validateMandatoryString("cif", cif);
 			customer.setCif(cif);
-		} catch (InputValidationException e) {
 		}
-		try {
+		if (address != null) {
 			PropertyValidator.validateMandatoryString("address", address);
 			customer.setAddress(address);
-		} catch (InputValidationException e) {
 		}
 		customersMap.put(customer.getCustomerId(), customer);
 
