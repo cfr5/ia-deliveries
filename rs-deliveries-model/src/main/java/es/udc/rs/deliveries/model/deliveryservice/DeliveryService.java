@@ -37,4 +37,9 @@ public interface DeliveryService {
 	public List<Shipment> findShipmentsByCustomer(Long customerId, Long start, Long count)
 			throws InputValidationException;
 
+	public void clearMaps();
+		
+	public void clearShipmentsMap();
+	
+	public void clearCustomersMap();
 }

@@ -140,7 +140,9 @@ public class MockDeliveryService implements DeliveryService {
 		}
 
 		userShipments.add(shipment);
-
+		
+		shipmentsByUserMap.put(customerId, userShipments);
+		
 		return shipment;
 	}
 
@@ -164,6 +166,9 @@ public class MockDeliveryService implements DeliveryService {
 				|| ((newState == ShipmentState.DELIVERED) && (currentState != ShipmentState.SENT)))
 			throw new InvalidStateException(currentState.toString(), newState.toString());
 
+		if( newState == ShipmentState.DELIVERED )
+			shipment.setDeliveryDate(Calendar.getInstance());
+		
 		shipment.setState(newState);
 
 		return shipment;
@@ -217,4 +222,30 @@ public class MockDeliveryService implements DeliveryService {
 		return shipments;
 	}
 
+	
+	@Override
+	public void clearMaps() {
+		shipmentsByUserMap.clear();
+		shipmentsMap.clear();
+		customersMap.clear();
+		lastCustomerId = 0;
+		lastShippingId = 0;
+	}
+
+	@Override
+	public void clearShipmentsMap() {
+		shipmentsByUserMap.clear();
+		shipmentsMap.clear();
+		
+		lastShippingId = 0;
+	}
+
+	@Override
+	public void clearCustomersMap() {
+		customersMap.clear();
+		
+		lastCustomerId = 0;
+	}
+
+	
 }
