@@ -64,10 +64,10 @@ public class MockDeliveryServiceTest {
 
 	@Test
 	public void testAddValidCustomer()
-			throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException {
+			throws InputValidationException, InstanceNotFoundException {
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer("Name", "CIF", "address");
-		deliveryService.removeCustomer(customer.getCustomerId());
+		deliveryService.clearCustomersMap();
 	}
 
 	
@@ -80,7 +80,7 @@ public class MockDeliveryServiceTest {
 
 	@Test
 	public void testAddAndFindCustormer()
-			throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException {
+			throws InputValidationException, InstanceNotFoundException {
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
@@ -88,7 +88,7 @@ public class MockDeliveryServiceTest {
 		Customer customer = deliveryService.addCustomer(name, cif, address);
 		Customer customerfound = deliveryService.findCustomerById(customer.getCustomerId());
 		assertEquals(customer, customerfound);
-		deliveryService.removeCustomer(customer.getCustomerId());
+		deliveryService.clearCustomersMap();
 	}
 	
 	@Test (expected = InputValidationException.class)
@@ -99,7 +99,7 @@ public class MockDeliveryServiceTest {
 	
 	@Test
 	public void testFindCustomerByKeyword()
-			throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException {
+			throws InputValidationException, InstanceNotFoundException {
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
@@ -109,8 +109,7 @@ public class MockDeliveryServiceTest {
 		List<Customer> customersnotfound = deliveryService.findCustomersByName("correcaminos");
 		assertTrue(customersfound.contains(customer));
 		assertTrue(customersnotfound.isEmpty());
-		deliveryService.removeCustomer(customer.getCustomerId());
-
+		deliveryService.clearCustomersMap();
 	}
 	
 	@Test
@@ -139,14 +138,25 @@ public class MockDeliveryServiceTest {
 	}
 	
 	@Test (expected = InputValidationException.class)
-	public void testUpdateCustomerWithThreeNulls() throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException{
+	public void testUpdateCustomerWithThreeNulls() throws InputValidationException, InstanceNotFoundException {
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
 		deliveryService.updateCustomer(customer.getCustomerId(), null, null, null);
-		deliveryService.removeCustomer(customer.getCustomerId());
+		deliveryService.clearCustomersMap();
+	}
+	
+	@Test (expected = InputValidationException.class)
+	public void testUpdateCustomerWithEmptyName() throws InputValidationException, InstanceNotFoundException {
+		String name = "Coyote";
+		String cif = "CIFCoyote";
+		String address = "Canyon Colorado";
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer(name, cif, address);
+		deliveryService.updateCustomer(customer.getCustomerId(), "", null, null);
+		deliveryService.clearCustomersMap();
 	}
 
 	@Test
