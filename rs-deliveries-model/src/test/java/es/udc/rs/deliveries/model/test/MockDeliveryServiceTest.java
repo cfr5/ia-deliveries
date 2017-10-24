@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import org.eclipse.persistence.internal.sessions.remote.SequencingFunctionCall.GetNextValue;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import es.udc.rs.deliveries.exceptions.CustomerWithShipmentsException;
@@ -17,7 +15,6 @@ import es.udc.rs.deliveries.exceptions.ShipmentNotPendingException;
 import es.udc.rs.deliveries.model.customer.Customer;
 import es.udc.rs.deliveries.model.deliveryservice.DeliveryService;
 import es.udc.rs.deliveries.model.deliveryservice.DeliveryServiceFactory;
-import es.udc.rs.deliveries.model.deliveryservice.MockDeliveryService;
 import es.udc.rs.deliveries.model.shipment.Shipment;
 import es.udc.rs.deliveries.model.shipment.ShipmentState;
 
@@ -73,23 +70,12 @@ public class MockDeliveryServiceTest {
 		deliveryService.removeCustomer(customer.getCustomerId());
 	}
 
-	@Test(expected = InstanceNotFoundException.class)
-	public void testRemoveCustomer()
-			throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException {
+	
+	
+	@Test (expected = InstanceNotFoundException.class)
+	public void testCustomerNotFound() throws InstanceNotFoundException, InputValidationException{
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
-		Customer customer = deliveryService.addCustomer("Name", "CIF", "address");
-		deliveryService.removeCustomer(customer.getCustomerId());
-		deliveryService.findCustomerById(customer.getCustomerId());
-
-	}
-
-	@Test(expected = InstanceNotFoundException.class)
-	public void testCustomerNotFound() throws InstanceNotFoundException, InputValidationException {
-		DeliveryService deliveryService = DeliveryServiceFactory.getService();
-		// Customer customer = deliveryService.findCustomerById(1l);
-		// System.out.println(customer.getName());
 		deliveryService.findCustomerById(999999l);
-
 	}
 
 	@Test
@@ -104,7 +90,13 @@ public class MockDeliveryServiceTest {
 		assertEquals(customer, customerfound);
 		deliveryService.removeCustomer(customer.getCustomerId());
 	}
-
+	
+	@Test (expected = InputValidationException.class)
+	public void testFindNullCustomer() throws InstanceNotFoundException, InputValidationException{
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		deliveryService.findCustomerById(null);
+	}
+	
 	@Test
 	public void testFindCustomerByKeyword()
 			throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException {
@@ -119,6 +111,34 @@ public class MockDeliveryServiceTest {
 		assertTrue(customersnotfound.isEmpty());
 		deliveryService.removeCustomer(customer.getCustomerId());
 
+	}
+	
+	@Test
+	public void testCustomerNotFoundByKeywords() throws InputValidationException{
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		List<Customer> listaresultados = deliveryService.findCustomersByName("NombrePrueba");
+		assertTrue(listaresultados.isEmpty());
+	}
+	
+	@Test (expected = InputValidationException.class)
+	public void testFindNullCustomerByKeywords() throws InputValidationException{
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		deliveryService.findCustomersByName(null);
+	}
+	
+	@Test (expected = InputValidationException.class)
+	public void testFindEmtyCustomerByKeywords() throws InputValidationException{
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		deliveryService.findCustomersByName("");
+	}
+	
+	@Test
+	public void testUpdateCustomer() throws InputValidationException{
+		String name = "Coyote";
+		String cif = "CIFCoyote";
+		String address = "Canyon Colorado";
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer(name, cif, address);
 	}
 
 	@Test
