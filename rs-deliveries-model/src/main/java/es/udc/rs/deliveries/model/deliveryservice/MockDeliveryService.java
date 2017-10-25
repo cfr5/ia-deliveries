@@ -56,27 +56,21 @@ public class MockDeliveryService implements DeliveryService {
 			PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
 		} else {
 			throw new InputValidationException("customerId cannot be null");
-		}		
-		if ((name==null)&&(cif == null) && (address == null)){
-			throw new InputValidationException("All values can't be null");
 		}
+		
+		PropertyValidator.validateMandatoryString("name", name);
+		PropertyValidator.validateMandatoryString("cif", cif);
+		PropertyValidator.validateMandatoryString("address", address);
 		
 		Customer customer = customersMap.get(customerId);
 		if (customer == null) {
 			throw new InstanceNotFoundException(customerId, Customer.class.getName());
 		}
-		if (name != null) {
-			PropertyValidator.validateMandatoryString("name", name);
-			customer.setName(name);
-		}
-		if (cif != null) {
-			PropertyValidator.validateMandatoryString("cif", cif);
-			customer.setCif(cif);
-		}
-		if (address != null) {
-			PropertyValidator.validateMandatoryString("address", address);
-			customer.setAddress(address);
-		}
+		
+		customer.setName(name);
+		customer.setCif(cif);
+		customer.setAddress(address);
+		
 		customersMap.put(customer.getCustomerId(), customer);
 
 		return customer;
