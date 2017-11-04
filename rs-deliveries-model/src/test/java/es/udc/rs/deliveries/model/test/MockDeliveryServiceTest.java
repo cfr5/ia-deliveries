@@ -134,17 +134,17 @@ public class MockDeliveryServiceTest {
 	@Test (expected = InputValidationException.class)
 	public void testUpdateNullCustomer() throws InputValidationException, InstanceNotFoundException{
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
-		deliveryService.updateCustomer(null, "Jesus", null, null);
+		deliveryService.updateCustomer(null, "Jesus", "cif", "address");
 	}
 	
 	@Test (expected = InputValidationException.class)
-	public void testUpdateCustomerWithThreeNulls() throws InputValidationException, InstanceNotFoundException {
+	public void testUpdateCustomerWithNullName() throws InputValidationException, InstanceNotFoundException {
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
-		deliveryService.updateCustomer(customer.getCustomerId(), null, null, null);
+		deliveryService.updateCustomer(customer.getCustomerId(), null, "CIF", "address");
 		deliveryService.clearCustomersMap();
 	}
 	
@@ -155,7 +155,76 @@ public class MockDeliveryServiceTest {
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
-		deliveryService.updateCustomer(customer.getCustomerId(), "", null, null);
+		deliveryService.updateCustomer(customer.getCustomerId(), "", "NEWcif", "NEWaddress");
+		deliveryService.clearCustomersMap();
+	}
+	
+	@Test (expected = InputValidationException.class)
+	public void testUpdateCustomerWithNullCIF() throws InputValidationException, InstanceNotFoundException {
+		String name = "Coyote";
+		String cif = "CIFCoyote";
+		String address = "Canyon Colorado";
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer(name, cif, address);
+		deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", null, "NEWaddress");
+		deliveryService.clearCustomersMap();
+	}
+	
+	@Test (expected = InputValidationException.class)
+	public void testUpdateCustomerWithEmptyCIF() throws InputValidationException, InstanceNotFoundException {
+		String name = "Coyote";
+		String cif = "CIFCoyote";
+		String address = "Canyon Colorado";
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer(name, cif, address);
+		deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "", "NEWaddress");
+		deliveryService.clearCustomersMap();
+	}
+	
+	@Test (expected = InputValidationException.class)
+	public void testUpdateCustomerWithNullAddress() throws InputValidationException, InstanceNotFoundException {
+		String name = "Coyote";
+		String cif = "CIFCoyote";
+		String address = "Canyon Colorado";
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer(name, cif, address);
+		deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "NEWCIF", null);
+		deliveryService.clearCustomersMap();
+	}
+	
+	@Test (expected = InputValidationException.class)
+	public void testUpdateCustomerWithEmptyAddress() throws InputValidationException, InstanceNotFoundException {
+		String name = "Coyote";
+		String cif = "CIFCoyote";
+		String address = "Canyon Colorado";
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer(name, cif, address);
+		deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "NEWCIF", "");
+		deliveryService.clearCustomersMap();
+	}
+	
+	@Test (expected = InstanceNotFoundException.class)
+	public void testUpdateNonExistantCustomer() throws InputValidationException, InstanceNotFoundException {
+		String name = "Coyote";
+		String cif = "CIFCoyote";
+		String address = "Canyon Colorado";
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer(name, cif, address);
+		deliveryService.updateCustomer(12312l, "NEWNAME", "NEWCIF", "NEWaddress");
+		deliveryService.clearCustomersMap();
+	}
+	
+	@Test
+	public void testUpdateExistantCustomer() throws InputValidationException, InstanceNotFoundException {
+		String name = "Coyote";
+		String cif = "CIFCoyote";
+		String address = "Canyon Colorado";
+		DeliveryService deliveryService = DeliveryServiceFactory.getService();
+		Customer customer = deliveryService.addCustomer(name, cif, address);
+		deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "NEWCIF", "NEWaddress");
+		assertEquals("NEWNAME", customer.getName());
+		assertEquals("NEWCIF", customer.getCif());
+		assertEquals("NEWaddress", customer.getAddress());
 		deliveryService.clearCustomersMap();
 	}
 
