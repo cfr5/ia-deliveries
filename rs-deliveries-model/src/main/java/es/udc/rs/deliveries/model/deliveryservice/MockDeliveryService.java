@@ -230,7 +230,6 @@ public class MockDeliveryService implements DeliveryService {
 	}
 
 	
-	@Override
 	public void clearMaps() {
 		shipmentsByUserMap.clear();
 		shipmentsMap.clear();
@@ -239,7 +238,6 @@ public class MockDeliveryService implements DeliveryService {
 		lastShippingId = 0;
 	}
 
-	@Override
 	public void clearShipmentsMap() {
 		shipmentsByUserMap.clear();
 		shipmentsMap.clear();
@@ -247,7 +245,6 @@ public class MockDeliveryService implements DeliveryService {
 		lastShippingId = 0;
 	}
 
-	@Override
 	public void clearCustomersMap() {
 		customersMap.clear();
 		
