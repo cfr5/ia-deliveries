@@ -51,51 +51,52 @@ public class MockDeliveryService implements DeliveryService {
 	@Override
 	public Customer updateCustomer(Long customerId, String name, String cif, String address)
 			throws InstanceNotFoundException, InputValidationException {
-		
-		if (customerId != null){
+
+		if (customerId != null) {
 			PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
 		} else {
 			throw new InputValidationException("customerId cannot be null");
 		}
-		
+
 		PropertyValidator.validateMandatoryString("name", name);
 		PropertyValidator.validateMandatoryString("cif", cif);
 		PropertyValidator.validateMandatoryString("address", address);
-		
+
 		Customer customer = customersMap.get(customerId);
 		if (customer == null) {
 			throw new InstanceNotFoundException(customerId, Customer.class.getName());
 		}
-		
+
 		customer.setName(name);
 		customer.setCif(cif);
 		customer.setAddress(address);
-		
+
 		customersMap.put(customer.getCustomerId(), customer);
 
 		return customer;
 	}
 
 	@Override
-	public void removeCustomer(Long customerId) throws InstanceNotFoundException, InputValidationException, CustomerWithShipmentsException {
-		if (customerId != null){
+	public void removeCustomer(Long customerId)
+			throws InstanceNotFoundException, InputValidationException, CustomerWithShipmentsException {
+		if (customerId != null) {
 			PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
 		} else {
 			throw new InputValidationException("customerId cannot be null");
-		}		
-		if (!shipmentsByUserMap.containsKey(customerId)){
+		}
+		if (!shipmentsByUserMap.containsKey(customerId)) {
 			Customer customer = customersMap.remove(customerId);
 			if (customer == null) {
 				throw new InstanceNotFoundException(customerId, Customer.class.getName());
 			}
 		} else {
-			throw new CustomerWithShipmentsException(customerId);			
+			throw new CustomerWithShipmentsException(customerId);
 		}
 	}
 
 	@Override
 	public Customer findCustomerById(Long customerId) throws InstanceNotFoundException, InputValidationException {
-		if (customerId != null){
+		if (customerId != null) {
 			PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
 		} else {
 			throw new InputValidationException("customerId cannot be null");
@@ -147,9 +148,9 @@ public class MockDeliveryService implements DeliveryService {
 		}
 
 		userShipments.add(shipment);
-		
+
 		shipmentsByUserMap.put(customerId, userShipments);
-		
+
 		return shipment;
 	}
 
@@ -173,9 +174,9 @@ public class MockDeliveryService implements DeliveryService {
 				|| ((newState == ShipmentState.DELIVERED) && (currentState != ShipmentState.SENT)))
 			throw new InvalidStateException(currentState.toString(), newState.toString());
 
-		if( newState == ShipmentState.DELIVERED )
+		if (newState == ShipmentState.DELIVERED)
 			shipment.setDeliveryDate(Calendar.getInstance());
-		
+
 		shipment.setState(newState);
 
 		return shipment;
@@ -219,17 +220,20 @@ public class MockDeliveryService implements DeliveryService {
 
 		PropertyValidator.validateLong("shipmentId", customerId, MININT, MAXINT);
 		PropertyValidator.validateLong("start", start, MININT, MAXINT);
-		PropertyValidator.validateLong("count", count, MININT, MAXINT);
+		PropertyValidator.validateLong("count", count, 1, MAXINT);
 
 		List<Shipment> shipments = shipmentsByUserMap.get(customerId);
 
-		if (shipments == null)
+		if ((shipments == null) || (start > shipments.size()))
 			return new ArrayList<>();
+		else {
+			if (count > shipments.size())
+				return shipments;
 
-		return shipments;
+			return shipments.subList(start.intValue(), start.intValue() + count.intValue());
+		}
 	}
 
-	
 	public void clearMaps() {
 		shipmentsByUserMap.clear();
 		shipmentsMap.clear();
@@ -241,15 +245,14 @@ public class MockDeliveryService implements DeliveryService {
 	public void clearShipmentsMap() {
 		shipmentsByUserMap.clear();
 		shipmentsMap.clear();
-		
+
 		lastShippingId = 0;
 	}
 
 	public void clearCustomersMap() {
 		customersMap.clear();
-		
+
 		lastCustomerId = 0;
 	}
 
-	
 }

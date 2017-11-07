@@ -355,19 +355,56 @@ public class MockDeliveryServiceTest {
 		((MockDeliveryService) deliveryService).clearMaps();
 	}
 
-	@Test
-	public void findShipmentsByCustomerId() throws InputValidationException, InstanceNotFoundException {
-		DeliveryService service = DeliveryServiceFactory.getService();
-		Customer customer = service.addCustomer("asdas", "cif1", "address1");
-		Shipment shipment = DeliveryServiceFactory.getService().addShipment(customer.getCustomerId(), 123l,
-				"address123");
+	@Test(expected = InputValidationException.class)
+	public void findShipmentsByCustomerIdInvalidId() throws InputValidationException {
+		DeliveryServiceFactory.getService().findShipmentsByCustomer(-1l, 0l, 0l);
+	}
 
-		List<Shipment> shipmnetsFound = DeliveryServiceFactory.getService()
-				.findShipmentsByCustomer(customer.getCustomerId(), 0l, 0l);
+	@Test(expected = InputValidationException.class)
+	public void findShipmentsByCustomerIdInvalidStart() throws InputValidationException {
+		DeliveryServiceFactory.getService().findShipmentsByCustomer(0l, -1l, 0l);
+	}
+
+	@Test(expected = InputValidationException.class)
+	public void findShipmentsByCustomerIdInvalidCount() throws InputValidationException {
+		DeliveryServiceFactory.getService().findShipmentsByCustomer(0l, 0l, 0l);
+	}
+
+	@Test
+	public void findShipmentsByCustomerIdWithoutShipments() throws InputValidationException {
+		Customer customer = DeliveryServiceFactory.getService().addCustomer("customer", "cif1", "address1");
+		List<Shipment> shipments = DeliveryServiceFactory.getService().findShipmentsByCustomer(customer.getCustomerId(),
+				0l, 1l);
+		assertTrue(shipments.isEmpty());
+
+	}
+
+	@Test
+	public void findShipmentsByCustomerId() throws InstanceNotFoundException, InputValidationException {
+		DeliveryService service = DeliveryServiceFactory.getService();
+		Customer customer = service.addCustomer("customer1", "cif1", "address1");
+		Shipment shipment = service.addShipment(customer.getCustomerId(), 123l, "address123");
+
+		List<Shipment> shipmnetsFound;
+
+		shipmnetsFound = service.findShipmentsByCustomer(customer.getCustomerId(), 0l, 1l);
 
 		assertTrue(shipmnetsFound.size() == 1);
-
+		assertEquals(shipment, shipmnetsFound.get(0));
+		
+		//Intentamos buscar mas shipments de los que tiene el cliente
+		shipmnetsFound = service.findShipmentsByCustomer(customer.getCustomerId(), 0l, 2l);
+		
+		assertTrue(shipmnetsFound.size() == 1);
+		assertEquals(shipment, shipmnetsFound.get(0));
+		
+		//Intentamos buscar con un offset mayor al numero de shipments del cliente
+		shipmnetsFound = service.findShipmentsByCustomer(customer.getCustomerId(), 2l, 2l);
+		
+		assertTrue(shipmnetsFound.isEmpty());
+		
 		((MockDeliveryService) service).clearMaps();
+		
 	}
 
 }
