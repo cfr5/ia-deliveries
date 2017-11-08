@@ -39,11 +39,10 @@ public class MockDeliveryService implements DeliveryService {
 	@Override
 	public Customer addCustomer(String name, String cif, String address) throws InputValidationException {
 
-		Customer customer = new Customer(0l, name, cif, address, Calendar.getInstance());
 		PropertyValidator.validateMandatoryString("name", name);
 		PropertyValidator.validateMandatoryString("cif", cif);
 		PropertyValidator.validateMandatoryString("address", address);
-		customer.setCustomerId(getNextCustomertId());
+		Customer customer = new Customer(getNextCustomertId(), name, cif, address, Calendar.getInstance());
 		customersMap.put(customer.getCustomerId(), customer);
 		return customer;
 	}

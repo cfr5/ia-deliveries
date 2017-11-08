@@ -151,10 +151,13 @@ public class MockDeliveryServiceTest {
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
+		Customer customer1 = deliveryService.addCustomer("COYOTE 1", "cif1", "address1");
+		Customer customer2 = deliveryService.addCustomer("coyote2", "cif2", "address2");
 		List<Customer> customersfound = deliveryService.findCustomersByName("coyote");
-		List<Customer> customersnotfound = deliveryService.findCustomersByName("correcaminos");
+		assertTrue(customersfound.size()==3);
 		assertTrue(customersfound.contains(customer));
-		assertTrue(customersnotfound.isEmpty());
+		assertTrue(customersfound.contains(customer1));
+		assertTrue(customersfound.contains(customer2));
 		((MockDeliveryService) deliveryService).clearCustomersMap();
 	}
 
@@ -183,81 +186,120 @@ public class MockDeliveryServiceTest {
 		deliveryService.updateCustomer(null, "Jesus", "cif", "address");
 	}
 
-	@Test(expected = InputValidationException.class)
+	@Test
 	public void testUpdateCustomerWithNullName() throws InputValidationException, InstanceNotFoundException {
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
-		Customer customer = deliveryService.addCustomer(name, cif, address);
-		deliveryService.updateCustomer(customer.getCustomerId(), null, "CIF", "address");
-		((MockDeliveryService) deliveryService).clearCustomersMap();
+		Customer customer;
+		customer = deliveryService.addCustomer(name, cif, address);
+		try {
+			deliveryService.updateCustomer(customer.getCustomerId(), null, "CIF", "address");
+		} catch (InputValidationException e) {
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) deliveryService).clearCustomersMap();
+		}
 	}
 
-	@Test(expected = InputValidationException.class)
+	@Test
 	public void testUpdateCustomerWithEmptyName() throws InputValidationException, InstanceNotFoundException {
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
-		deliveryService.updateCustomer(customer.getCustomerId(), "", "NEWcif", "NEWaddress");
-		((MockDeliveryService) deliveryService).clearCustomersMap();
+		try {
+			deliveryService.updateCustomer(customer.getCustomerId(), "", "NEWcif", "NEWaddress");
+		} catch (InputValidationException e) {
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) deliveryService).clearCustomersMap();
+		}
 	}
 
-	@Test(expected = InputValidationException.class)
+	@Test
 	public void testUpdateCustomerWithNullCIF() throws InputValidationException, InstanceNotFoundException {
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
-		deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", null, "NEWaddress");
-		((MockDeliveryService) deliveryService).clearCustomersMap();
+		
+		try {
+			deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", null, "NEWaddress");
+		} catch (InputValidationException e) {
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) deliveryService).clearCustomersMap();
+		}
 	}
 
-	@Test(expected = InputValidationException.class)
+	@Test
 	public void testUpdateCustomerWithEmptyCIF() throws InputValidationException, InstanceNotFoundException {
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
-		deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "", "NEWaddress");
-		((MockDeliveryService) deliveryService).clearCustomersMap();
+		try {
+			deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "", "NEWaddress");
+		} catch (InputValidationException e) {
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) deliveryService).clearCustomersMap();
+		}
 	}
 
-	@Test(expected = InputValidationException.class)
+	@Test
 	public void testUpdateCustomerWithNullAddress() throws InputValidationException, InstanceNotFoundException {
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
-		deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "NEWCIF", null);
-		((MockDeliveryService) deliveryService).clearCustomersMap();
+		
+		try {
+			deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "NEWCIF", null);
+		} catch (InputValidationException e) {
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) deliveryService).clearCustomersMap();
+		}
 	}
 
-	@Test(expected = InputValidationException.class)
+	@Test
 	public void testUpdateCustomerWithEmptyAddress() throws InputValidationException, InstanceNotFoundException {
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
-		deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "NEWCIF", "");
-		((MockDeliveryService) deliveryService).clearCustomersMap();
+		
+		try {
+			deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "NEWCIF", "");
+		} catch (InputValidationException e) {
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) deliveryService).clearCustomersMap();
+		}
 	}
 
-	@Test(expected = InstanceNotFoundException.class)
+	@Test
 	public void testUpdateNonExistantCustomer() throws InputValidationException, InstanceNotFoundException {
 		String name = "Coyote";
 		String cif = "CIFCoyote";
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
-		deliveryService.updateCustomer(12312l, "NEWNAME", "NEWCIF", "NEWaddress");
-		((MockDeliveryService) deliveryService).clearCustomersMap();
+		try {
+			deliveryService.updateCustomer(12312l, "NEWNAME", "NEWCIF", "NEWaddress");
+		} catch (InstanceNotFoundException e) {
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) deliveryService).clearCustomersMap();
+		}
 	}
 
 	@Test
@@ -295,38 +337,51 @@ public class MockDeliveryServiceTest {
 		deliveryService.addShipment(-1l, 10l, "address");
 	}
 
-	@Test(expected = InputValidationException.class)
+	@Test
 	public void testAddShipmentWithInvalidPackageReference()
 			throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException {
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 
 		Customer customer = deliveryService.addCustomer("Pepito", "00000000", "direccion");
 
-		deliveryService.addShipment(customer.getCustomerId(), -10l, "address");
-
-		((MockDeliveryService) deliveryService).clearMaps();
+		try {
+			deliveryService.addShipment(customer.getCustomerId(), -10l, "address");			
+		} catch(InputValidationException e){
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) deliveryService).clearMaps();
+		}
 
 	}
 
-	@Test(expected = InputValidationException.class)
+	@Test
 	public void testAddShipmentWithInvalidAddress()
 			throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException {
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 
 		Customer customer = deliveryService.addCustomer("Pepito", "00000000", "direccion");
 
-		deliveryService.addShipment(customer.getCustomerId(), 10l, null);
-
-		((MockDeliveryService) deliveryService).clearMaps();
+		try {
+			deliveryService.addShipment(customer.getCustomerId(), 10l, null);
+		} catch(InputValidationException e){
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) deliveryService).clearMaps();
+		}
+		
 	}
 
-	@Test(expected = InstanceNotFoundException.class)
+	@Test
 	public void testAddShipmentWithoutCustomer() throws InputValidationException, InstanceNotFoundException {
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
-
-		deliveryService.addShipment(0l, 10l, "direccion");
-
-		((MockDeliveryService) deliveryService).clearShipmentsMap();
+	
+		try {
+			deliveryService.addShipment(0l, 10l, "direccion");
+		} catch(InstanceNotFoundException e){
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) deliveryService).clearShipmentsMap();
+		}
 	}
 
 	private Shipment addValidShipment() throws InputValidationException, InstanceNotFoundException {
@@ -335,7 +390,7 @@ public class MockDeliveryServiceTest {
 		return deliveryService.addShipment(customer.getCustomerId(), 10l, "address");
 	}
 
-	@Test(expected = ShipmentNotPendingException.class)
+	@Test
 	public void testCancelShipment() throws InputValidationException, InstanceNotFoundException,
 			ShipmentNotPendingException, CustomerWithShipmentsException {
 		Shipment shipment = addValidShipment();
@@ -350,9 +405,14 @@ public class MockDeliveryServiceTest {
 
 		assertEquals(shipment.getState(), ShipmentState.CANCELLED);
 
-		deliveryService.cancelShipment(shipment.getShipmentId());
-
-		((MockDeliveryService) deliveryService).clearMaps();
+		try {
+			deliveryService.cancelShipment(shipment.getShipmentId());
+		} catch(ShipmentNotPendingException e){
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) deliveryService).clearMaps();
+		}
+		
 	}
 
 	@Test(expected = InputValidationException.class)
