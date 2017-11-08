@@ -89,6 +89,56 @@ public class MockDeliveryServiceTest {
 	}
 
 	@Test(expected = InputValidationException.class)
+	public void testRemoveCustomerInvalidId()
+			throws InstanceNotFoundException, InputValidationException, CustomerWithShipmentsException {
+		DeliveryService service = DeliveryServiceFactory.getService();
+		service.removeCustomer(-1l);
+	}
+
+	@Test(expected = InstanceNotFoundException.class)
+	public void testRemoveNonExistentCustomer()
+			throws InstanceNotFoundException, InputValidationException, CustomerWithShipmentsException {
+		DeliveryService service = DeliveryServiceFactory.getService();
+		service.removeCustomer(0l);
+	}
+
+	@Test(expected = InstanceNotFoundException.class)
+	public void testRemoveCustomerNonExistentCustomer()
+			throws InstanceNotFoundException, InputValidationException, CustomerWithShipmentsException {
+		DeliveryService service = DeliveryServiceFactory.getService();
+		service.removeCustomer(0l);
+	}
+
+	@Test
+	public void testRemoveCustomer()
+			throws InputValidationException, InstanceNotFoundException, CustomerWithShipmentsException {
+		DeliveryService service = DeliveryServiceFactory.getService();
+		Customer customer = service.addCustomer("Customer", "123456789A", "address");
+		service.removeCustomer(customer.getCustomerId());
+
+		try {
+			service.findCustomerById(customer.getCustomerId());
+		} catch (InstanceNotFoundException e) {
+			assertTrue(true);
+		}
+	}
+
+	@Test
+	public void testRemoveCustomerWithShipments() throws InputValidationException, InstanceNotFoundException {
+		DeliveryService service = DeliveryServiceFactory.getService();
+		Customer customer = service.addCustomer("Customer", "123456789A", "address");
+		service.addShipment(customer.getCustomerId(), 1234l, customer.getAddress());
+
+		try {
+			service.removeCustomer(customer.getCustomerId());
+		} catch (CustomerWithShipmentsException e) {
+			assertTrue(true);
+		} finally {
+			((MockDeliveryService) service).clearCustomersMap();
+		}
+	}
+
+	@Test(expected = InputValidationException.class)
 	public void testFindNullCustomer() throws InstanceNotFoundException, InputValidationException {
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		deliveryService.findCustomerById(null);
@@ -391,20 +441,21 @@ public class MockDeliveryServiceTest {
 
 		assertTrue(shipmnetsFound.size() == 1);
 		assertEquals(shipment, shipmnetsFound.get(0));
-		
-		//Intentamos buscar mas shipments de los que tiene el cliente
+
+		// Intentamos buscar mas shipments de los que tiene el cliente
 		shipmnetsFound = service.findShipmentsByCustomer(customer.getCustomerId(), 0l, 2l);
-		
+
 		assertTrue(shipmnetsFound.size() == 1);
 		assertEquals(shipment, shipmnetsFound.get(0));
-		
-		//Intentamos buscar con un offset mayor al numero de shipments del cliente
+
+		// Intentamos buscar con un offset mayor al numero de shipments del
+		// cliente
 		shipmnetsFound = service.findShipmentsByCustomer(customer.getCustomerId(), 2l, 2l);
-		
+
 		assertTrue(shipmnetsFound.isEmpty());
-		
+
 		((MockDeliveryService) service).clearMaps();
-		
+
 	}
 
 }
