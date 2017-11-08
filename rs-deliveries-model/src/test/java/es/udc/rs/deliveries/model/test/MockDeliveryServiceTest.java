@@ -1,6 +1,7 @@
 package es.udc.rs.deliveries.model.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -102,11 +103,11 @@ public class MockDeliveryServiceTest {
 		service.removeCustomer(0l);
 	}
 
-	@Test(expected = InstanceNotFoundException.class)
-	public void testRemoveCustomerNonExistentCustomer()
+	@Test(expected = InputValidationException.class)
+	public void testRemoveNullCustomer()
 			throws InstanceNotFoundException, InputValidationException, CustomerWithShipmentsException {
 		DeliveryService service = DeliveryServiceFactory.getService();
-		service.removeCustomer(0l);
+		service.removeCustomer(null);
 	}
 
 	@Test
@@ -154,7 +155,7 @@ public class MockDeliveryServiceTest {
 		Customer customer1 = deliveryService.addCustomer("COYOTE 1", "cif1", "address1");
 		Customer customer2 = deliveryService.addCustomer("coyote2", "cif2", "address2");
 		List<Customer> customersfound = deliveryService.findCustomersByName("coyote");
-		assertTrue(customersfound.size()==3);
+		assertTrue(customersfound.size() == 3);
 		assertTrue(customersfound.contains(customer));
 		assertTrue(customersfound.contains(customer1));
 		assertTrue(customersfound.contains(customer2));
@@ -226,7 +227,7 @@ public class MockDeliveryServiceTest {
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
-		
+
 		try {
 			deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", null, "NEWaddress");
 		} catch (InputValidationException e) {
@@ -259,7 +260,7 @@ public class MockDeliveryServiceTest {
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
-		
+
 		try {
 			deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "NEWCIF", null);
 		} catch (InputValidationException e) {
@@ -276,7 +277,7 @@ public class MockDeliveryServiceTest {
 		String address = "Canyon Colorado";
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 		Customer customer = deliveryService.addCustomer(name, cif, address);
-		
+
 		try {
 			deliveryService.updateCustomer(customer.getCustomerId(), "NEWNAME", "NEWCIF", "");
 		} catch (InputValidationException e) {
@@ -331,10 +332,40 @@ public class MockDeliveryServiceTest {
 	}
 
 	@Test(expected = InputValidationException.class)
+	public void testFindShipmnetByNullId() throws InputValidationException, InstanceNotFoundException {
+		DeliveryServiceFactory.getService().findShipmentById(null);
+	}
+
+	@Test(expected = InstanceNotFoundException.class)
+	public void testFindUnexistentShipment() throws InputValidationException, InstanceNotFoundException {
+		DeliveryServiceFactory.getService().findShipmentById(100l);
+	}
+	
+	@Test(expected = InputValidationException.class)
 	public void testAddShipmentWithInvalidCustomerId() throws InputValidationException, InstanceNotFoundException {
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
 
 		deliveryService.addShipment(-1l, 10l, "address");
+	}
+
+	@Test(expected = InputValidationException.class)
+	public void testAddShipmentWithNullId() throws InputValidationException, InstanceNotFoundException {
+		DeliveryServiceFactory.getService().addShipment(null, 0l, "address");
+	}
+
+	@Test(expected = InputValidationException.class)
+	public void testAddShipmentWithNullPackageReference() throws InputValidationException, InstanceNotFoundException {
+		DeliveryServiceFactory.getService().addShipment(1l, null, "address");
+	}
+
+	@Test(expected = InputValidationException.class)
+	public void testAddShipmentWithNullAddress() throws InputValidationException, InstanceNotFoundException {
+		DeliveryServiceFactory.getService().addShipment(1l, 0l, null);
+	}
+
+	@Test(expected = InputValidationException.class)
+	public void testAddShipmentWithEmptyAddress() throws InputValidationException, InstanceNotFoundException {
+		DeliveryServiceFactory.getService().addShipment(1l, 0l, "");
 	}
 
 	@Test
@@ -345,8 +376,8 @@ public class MockDeliveryServiceTest {
 		Customer customer = deliveryService.addCustomer("Pepito", "00000000", "direccion");
 
 		try {
-			deliveryService.addShipment(customer.getCustomerId(), -10l, "address");			
-		} catch(InputValidationException e){
+			deliveryService.addShipment(customer.getCustomerId(), -10l, "address");
+		} catch (InputValidationException e) {
 			assertTrue(true);
 		} finally {
 			((MockDeliveryService) deliveryService).clearMaps();
@@ -363,21 +394,21 @@ public class MockDeliveryServiceTest {
 
 		try {
 			deliveryService.addShipment(customer.getCustomerId(), 10l, null);
-		} catch(InputValidationException e){
+		} catch (InputValidationException e) {
 			assertTrue(true);
 		} finally {
 			((MockDeliveryService) deliveryService).clearMaps();
 		}
-		
+
 	}
 
 	@Test
 	public void testAddShipmentWithoutCustomer() throws InputValidationException, InstanceNotFoundException {
 		DeliveryService deliveryService = DeliveryServiceFactory.getService();
-	
+
 		try {
 			deliveryService.addShipment(0l, 10l, "direccion");
-		} catch(InstanceNotFoundException e){
+		} catch (InstanceNotFoundException e) {
 			assertTrue(true);
 		} finally {
 			((MockDeliveryService) deliveryService).clearShipmentsMap();
@@ -407,14 +438,20 @@ public class MockDeliveryServiceTest {
 
 		try {
 			deliveryService.cancelShipment(shipment.getShipmentId());
-		} catch(ShipmentNotPendingException e){
+		} catch (ShipmentNotPendingException e) {
 			assertTrue(true);
 		} finally {
 			((MockDeliveryService) deliveryService).clearMaps();
 		}
-		
+
 	}
 
+	@Test(expected = InputValidationException.class)
+	public void testCancelShipmentWithNullId()
+			throws InputValidationException, InstanceNotFoundException, ShipmentNotPendingException {
+		DeliveryServiceFactory.getService().cancelShipment(null);
+	}
+	
 	@Test(expected = InputValidationException.class)
 	public void testCancelInvalidShipment()
 			throws InputValidationException, InstanceNotFoundException, ShipmentNotPendingException {
@@ -466,18 +503,33 @@ public class MockDeliveryServiceTest {
 	}
 
 	@Test(expected = InputValidationException.class)
-	public void findShipmentsByCustomerIdInvalidId() throws InputValidationException {
+	public void testFindShipmentsByCustomerIdInvalidId() throws InputValidationException {
 		DeliveryServiceFactory.getService().findShipmentsByCustomer(-1l, 0l, 0l);
 	}
 
 	@Test(expected = InputValidationException.class)
-	public void findShipmentsByCustomerIdInvalidStart() throws InputValidationException {
+	public void testFindShipmentsByCustomerIdInvalidStart() throws InputValidationException {
 		DeliveryServiceFactory.getService().findShipmentsByCustomer(0l, -1l, 0l);
 	}
 
 	@Test(expected = InputValidationException.class)
-	public void findShipmentsByCustomerIdInvalidCount() throws InputValidationException {
+	public void testFindShipmentsByCustomerIdInvalidCount() throws InputValidationException {
 		DeliveryServiceFactory.getService().findShipmentsByCustomer(0l, 0l, 0l);
+	}
+
+	@Test(expected = InputValidationException.class)
+	public void testFindShipmentsByCustomerIdNullId() throws InputValidationException {
+		DeliveryServiceFactory.getService().findShipmentsByCustomer(null, 0l, 0l);
+	}
+
+	@Test(expected = InputValidationException.class)
+	public void testFindShipmentsByCustomerIdNullStart() throws InputValidationException {
+		DeliveryServiceFactory.getService().findShipmentsByCustomer(0l, null, 0l);
+	}
+
+	@Test(expected = InputValidationException.class)
+	public void testFindShipmentsByCustomerIdNullCount() throws InputValidationException {
+		DeliveryServiceFactory.getService().findShipmentsByCustomer(0l, 0l, null);
 	}
 
 	@Test
@@ -494,6 +546,8 @@ public class MockDeliveryServiceTest {
 		DeliveryService service = DeliveryServiceFactory.getService();
 		Customer customer = service.addCustomer("customer1", "cif1", "address1");
 		Shipment shipment = service.addShipment(customer.getCustomerId(), 123l, "address123");
+		Shipment shipment1 = service.addShipment(customer.getCustomerId(), 234l, "address123");
+		Shipment shipment2 = service.addShipment(customer.getCustomerId(), 345l, "address123");
 
 		List<Shipment> shipmnetsFound;
 
@@ -503,16 +557,36 @@ public class MockDeliveryServiceTest {
 		assertEquals(shipment, shipmnetsFound.get(0));
 
 		// Intentamos buscar mas shipments de los que tiene el cliente
-		shipmnetsFound = service.findShipmentsByCustomer(customer.getCustomerId(), 0l, 2l);
+		shipmnetsFound = service.findShipmentsByCustomer(customer.getCustomerId(), 0l, 4l);
 
-		assertTrue(shipmnetsFound.size() == 1);
+		assertTrue(shipmnetsFound.size() == 3);
 		assertEquals(shipment, shipmnetsFound.get(0));
 
 		// Intentamos buscar con un offset mayor al numero de shipments del
 		// cliente
-		shipmnetsFound = service.findShipmentsByCustomer(customer.getCustomerId(), 2l, 2l);
+		shipmnetsFound = service.findShipmentsByCustomer(customer.getCustomerId(), 5l, 3l);
 
 		assertTrue(shipmnetsFound.isEmpty());
+
+		// Intentamos buscar mas shipments de los que tiene el cliente con
+		// offset mayor que 0 y menor que el numero de shipments
+
+		shipmnetsFound = service.findShipmentsByCustomer(customer.getCustomerId(), 1l, 4l);
+
+		assertTrue(shipmnetsFound.size() == 2);
+		assertTrue(shipmnetsFound.contains(shipment1));
+		assertTrue(shipmnetsFound.contains(shipment2));
+		assertFalse(shipmnetsFound.contains(shipment));
+
+		Shipment shipment3 = service.addShipment(customer.getCustomerId(), 456l, "address123");
+		Shipment shipment4 = service.addShipment(customer.getCustomerId(), 567l, "address123");
+
+		// Intentamos buscar con offset mayor que 0 y menor que el tamaño
+		shipmnetsFound = service.findShipmentsByCustomer(customer.getCustomerId(), 3l, 1l);
+
+		assertTrue(shipmnetsFound.size() == 1);
+		assertTrue(shipmnetsFound.contains(shipment3));
+		assertFalse(shipmnetsFound.contains(shipment4));
 
 		((MockDeliveryService) service).clearMaps();
 

@@ -124,6 +124,12 @@ public class MockDeliveryService implements DeliveryService {
 	public Shipment addShipment(Long customerId, Long packageReference, String address)
 			throws InputValidationException, InstanceNotFoundException {
 
+		if (customerId == null)
+			throw new InputValidationException("'customerId' can not be null");
+
+		if (packageReference == null)
+			throw new InputValidationException("'packageReference' can not be null");
+
 		PropertyValidator.validateLong("customerId", customerId, MININT, MAXINT);
 		PropertyValidator.validateLong("packageReference", packageReference, MININT, MAXINT);
 		PropertyValidator.validateMandatoryString("address", address);
@@ -157,6 +163,9 @@ public class MockDeliveryService implements DeliveryService {
 	public Shipment updateShipmentState(Long shipmentId, ShipmentState newState)
 			throws InputValidationException, InstanceNotFoundException, InvalidStateException {
 
+		if (shipmentId == null)
+			throw new InputValidationException("'shipmentId' can not be null");
+
 		PropertyValidator.validateLong("shipmentId", shipmentId, MININT, MAXINT);
 
 		if (newState == null)
@@ -184,8 +193,12 @@ public class MockDeliveryService implements DeliveryService {
 	@Override
 	public void cancelShipment(Long shipmentId)
 			throws InputValidationException, InstanceNotFoundException, ShipmentNotPendingException {
-		PropertyValidator.validateLong("shipmentId", shipmentId, MININT, MAXINT);
+		
+		if (shipmentId == null)
+			throw new InputValidationException("'shipmentId' can not be null");
 
+		PropertyValidator.validateLong("shipmentId", shipmentId, MININT, MAXINT);
+		
 		Shipment shipment = shipmentsMap.get(shipmentId);
 
 		if (shipment == null)
@@ -203,6 +216,9 @@ public class MockDeliveryService implements DeliveryService {
 	@Override
 	public Shipment findShipmentById(Long shipmentId) throws InputValidationException, InstanceNotFoundException {
 
+		if (shipmentId == null)
+			throw new InputValidationException("'shipmentId' can not be null");
+
 		PropertyValidator.validateLong("shipmentId", shipmentId, MININT, MAXINT);
 
 		Shipment shipment = shipmentsMap.get(shipmentId);
@@ -217,6 +233,15 @@ public class MockDeliveryService implements DeliveryService {
 	public List<Shipment> findShipmentsByCustomer(Long customerId, Long start, Long count)
 			throws InputValidationException {
 
+		if (customerId == null)
+			throw new InputValidationException("'customerId' can not be null");
+
+		if (start == null)
+			throw new InputValidationException("'start' can not be null");
+
+		if (count == null)
+			throw new InputValidationException("'count' can not be null");
+
 		PropertyValidator.validateLong("shipmentId", customerId, MININT, MAXINT);
 		PropertyValidator.validateLong("start", start, MININT, MAXINT);
 		PropertyValidator.validateLong("count", count, 1, MAXINT);
@@ -226,8 +251,9 @@ public class MockDeliveryService implements DeliveryService {
 		if ((shipments == null) || (start > shipments.size()))
 			return new ArrayList<>();
 		else {
-			if (count > shipments.size())
-				return shipments;
+
+			if (start + count > shipments.size())
+				return shipments.subList(start.intValue(), shipments.size());
 
 			return shipments.subList(start.intValue(), start.intValue() + count.intValue());
 		}
