@@ -6,9 +6,8 @@ import es.udc.rs.deliveries.jaxrs.dto.shipment.DateDtoJaxb;
 
 public class CalendarToCalendarDtoJaxbConversor {
 
-	public static DateDtoJaxb toDateDtoJaxb(Calendar maxDeliveryDate) {
-		// TODO Auto-generated method stub
-		return null;
+	public static DateDtoJaxb toDateDtoJaxb(Calendar calendar) {
+		return new DateDtoJaxb(calendar);
 	}
 
 }
