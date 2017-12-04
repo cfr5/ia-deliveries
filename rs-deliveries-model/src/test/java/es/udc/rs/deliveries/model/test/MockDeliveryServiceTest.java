@@ -121,6 +121,8 @@ public class MockDeliveryServiceTest {
 			service.findCustomerById(customer.getCustomerId());
 		} catch (InstanceNotFoundException e) {
 			assertTrue(true);
+		} finally {
+			((MockDeliveryService) service).clearMaps();
 		}
 	}
 
