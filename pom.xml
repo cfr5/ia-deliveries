@@ -77,10 +77,6 @@
 	<!-- Dependency management -->
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-core</artifactId>
-			</dependency>
 			<!-- JUnit -->
 			<dependency>
 				<groupId>junit</groupId>
