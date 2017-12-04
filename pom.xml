@@ -33,7 +33,7 @@
 		<!-- Plugin versions -->
 		<mavenCompilerPlugin.version>3.5.1</mavenCompilerPlugin.version>
 		<mavenResourcesPlugin.version>3.0.1</mavenResourcesPlugin.version>
-		<!--  <sqlMavenPlugin.version>1.5</sqlMavenPlugin.version> -->
+		<!-- <sqlMavenPlugin.version>1.5</sqlMavenPlugin.version> -->
 		<mavenAssemblyPlugin.version>2.6</mavenAssemblyPlugin.version>
 		<jettyMavenPlugin>9.3.10.v20160621</jettyMavenPlugin>
 		<jaxwsMavenPlugin>2.4.1</jaxwsMavenPlugin>
@@ -67,7 +67,7 @@
 			</properties>
 		</profile>
 	</profiles>
-	
+
 	<!-- ========================================================== -->
 	<!-- Additional repositories -->
 	<repositories>
@@ -77,6 +77,10 @@
 	<!-- Dependency management -->
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>com.sun.xml.bind</groupId>
+				<artifactId>jaxb-core</artifactId>
+			</dependency>
 			<!-- JUnit -->
 			<dependency>
 				<groupId>junit</groupId>
@@ -133,7 +137,7 @@
 				<groupId>org.glassfish.jersey.media</groupId>
 				<artifactId>jersey-media-jaxb</artifactId>
 				<version>${jersey.version}</version>
-			</dependency> 			
+			</dependency>
 			<!-- Jersey JSON support -->
 			<!-- MOXy -->
 			<dependency>
@@ -142,11 +146,11 @@
 				<version>${jersey.version}</version>
 			</dependency>
 			<!-- Jettison -->
-     		<dependency>
-            	<groupId>org.glassfish.jersey.media</groupId>
-    			<artifactId>jersey-media-json-jettison</artifactId>
+			<dependency>
+				<groupId>org.glassfish.jersey.media</groupId>
+				<artifactId>jersey-media-json-jettison</artifactId>
 				<version>${jersey.version}</version>
-        	</dependency>
+			</dependency>
 			<!-- Deliveries Util -->
 			<dependency>
 				<groupId>es.udc.rs.deliveries</groupId>
@@ -193,7 +197,7 @@
 				<targetPath>../jetty</targetPath>
 				<filtering>true</filtering>
 			</resource>
-			
+
 		</resources>
 
 		<testResources>
@@ -227,14 +231,14 @@
 
 			<!-- ========================================================== -->
 			<!-- Resources plugin -->
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>${mavenResourcesPlugin.version}</version>
 			</plugin>
 
-  			<!-- ========================================================== -->
+			<!-- ========================================================== -->
 			<!-- Exec plugin -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -262,9 +266,9 @@
 				<version>${jettyMavenPlugin}</version>
 
 				<configuration>
-                    <httpConnector>
-                        <port>7070</port>
-                    </httpConnector>
+					<httpConnector>
+						<port>7070</port>
+					</httpConnector>
 					<contextXml>target/jetty/jetty-context.xml</contextXml>
 					<webAppConfig>
 						<contextPath>/${project.artifactId}</contextPath>
@@ -273,7 +277,7 @@
 					<reload>manual</reload>
 				</configuration>
 			</plugin>
-			
+
 			<!-- ========================================================== -->
 			<!-- Properties configuration -->
 			<!-- This plugin is used to ensure that the usage of the maven-jaxb2-plugin 
