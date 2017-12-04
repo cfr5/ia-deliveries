@@ -60,7 +60,7 @@
 				<configuration>
 					<sources>
 						<source>src/main/java/es/udc/rs/deliveries/jaxrs/dto/shipment</source>
-						<source>src/main/java/es/udc/rs/deliveries/jaxrs/dto/shipment</source>
+						<source>src/main/java/es/udc/rs/deliveries/jaxrs/dto/customer</source>
 					</sources>
 				</configuration>
 			</plugin>
