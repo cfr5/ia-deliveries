@@ -1,10 +1,10 @@
 package es.udc.rs.deliveries.jaxrs.dto.customer;
 
-import java.util.Calendar;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import es.udc.rs.deliveries.jaxrs.dto.shipment.DateDtoJaxb;
 
 @XmlRootElement(name="customer")
 @XmlType(name="customerType", propOrder = {"customerId", "name", "Cif", "address","creationDate"})
@@ -24,13 +24,13 @@ public class CustomerDtoJaxb {
 	public CustomerDtoJaxb() {
     } 
 	
-	public CustomerDtoJaxb(Long customerId, String name, String cif, String address, Calendar creationDate) {
+	public CustomerDtoJaxb(Long customerId, String name, String cif, String address, DateDtoJaxb creationDate) {
 		super();
 		this.customerId = customerId;
 		this.name = name;
-		Cif = cif;
+		this.Cif = cif;
 		this.address = address;
-		this.creationDate = new DateDtoJaxb(creationDate);
+		this.creationDate = creationDate;
 	}
 
 	public Long getCustomerId() {
