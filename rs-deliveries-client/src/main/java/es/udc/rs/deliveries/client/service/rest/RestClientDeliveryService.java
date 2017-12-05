@@ -1,11 +1,15 @@
 package es.udc.rs.deliveries.client.service.rest;
 
+import java.util.List;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 
 import es.udc.rs.deliveries.client.service.ClientDeliveryService;
+import es.udc.rs.deliveries.client.service.rest.dto.shipment.ClientShipmentDto;
+import es.udc.rs.deliveries.client.service.rest.dto.shipment.ClientShipmentStateDto;
 import es.udc.ws.util.configuration.ConfigurationParametersManager;
 
 public abstract class RestClientDeliveryService implements ClientDeliveryService {
@@ -36,7 +40,30 @@ public abstract class RestClientDeliveryService implements ClientDeliveryService
 		}
 		return endPointWebTarget;
 	}
-	
+
 	protected abstract MediaType getMediaType();
 
+	@Override
+	public Long addCustomer(String name, String Cif, String address) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteCustomer(Long parseLong) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void changeState(Long shipmentId, ClientShipmentStateDto newState) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<ClientShipmentDto> findByCustomer(Long customerId, Long start, Long amount) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
