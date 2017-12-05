@@ -15,18 +15,18 @@ public class ShipmentDtoJaxbList {
 	private List<ShipmentDtoJaxb> shipments = null;
 
 	public ShipmentDtoJaxbList() {
-    	this.shipments = new ArrayList<ShipmentDtoJaxb>();
-    }
+		this.shipments = new ArrayList<ShipmentDtoJaxb>();
+	}
 
 	public ShipmentDtoJaxbList(List<ShipmentDtoJaxb> shipments) {
-        this.shipments = shipments;
-    }
+		this.shipments = shipments;
+	}
 
-	public List<ShipmentDtoJaxb> getMovies() {
+	public List<ShipmentDtoJaxb> getShipments() {
 		return shipments;
 	}
 
-	public void setMovies(List<ShipmentDtoJaxb> shipments) {
+	public void setShipments(List<ShipmentDtoJaxb> shipments) {
 		this.shipments = shipments;
 	}
 

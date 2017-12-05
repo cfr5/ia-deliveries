@@ -65,16 +65,16 @@ public class ShipmentResource {
 
 	}
 
-	@PUT
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Path("/{id}")
-	public void cancelShipmentState(@FormParam("shipmentId") Long shipmentId, @Context UriInfo ui)
-			throws InputValidationException, InstanceNotFoundException, ShipmentNotPendingException {
-
-		DeliveryServiceFactory.getService().cancelShipment(shipmentId);
-
-	}
+//	@PUT
+//	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+//	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+//	@Path("/{id}")
+//	public void cancelShipmentState(@FormParam("shipmentId") Long shipmentId, @Context UriInfo ui)
+//			throws InputValidationException, InstanceNotFoundException, ShipmentNotPendingException {
+//
+//		DeliveryServiceFactory.getService().cancelShipment(shipmentId);
+//
+//	}
 
 	@GET
 	@Path("/{id}")
