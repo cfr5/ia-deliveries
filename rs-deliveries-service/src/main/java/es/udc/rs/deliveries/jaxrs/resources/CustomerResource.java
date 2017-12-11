@@ -31,7 +31,6 @@ import es.udc.rs.deliveries.model.deliveryservice.DeliveryServiceFactory;
 public class CustomerResource {
 
 	@POST
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response addCustomer(@FormParam("name") String name, @FormParam("cif") String cif,
 			@FormParam("address") String address, @Context UriInfo ui)
@@ -49,13 +48,19 @@ public class CustomerResource {
 	}
 
 	@PUT
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{id}")
-	public void updateCustomer(@PathParam("customerId") Long customerId, @QueryParam("name") String name,
+	public void updateCustomer(@PathParam("id") String id, @QueryParam("name") String name,
 			@QueryParam("cif") String cif, @QueryParam("address") String address, @Context UriInfo ui)
 			throws InstanceNotFoundException, InputValidationException {
 
+		Long customerId;
+		try {
+			customerId = Long.valueOf(id);
+		} catch (NumberFormatException ex) {
+			throw new InputValidationException("Invalid Request: "
+					+ "unable to parse customer id '" + id + "'");
+		}
 		DeliveryServiceFactory.getService().updateCustomer(customerId, name, cif, address);
 
 	}
@@ -63,9 +68,16 @@ public class CustomerResource {
 	@DELETE
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{id}")
-	public void removeCustomer(@PathParam("customerId") Long customerId, @Context UriInfo ui)
+	public void removeCustomer(@PathParam("id") String id, @Context UriInfo ui)
 			throws InstanceNotFoundException, InputValidationException, CustomerWithShipmentsException {
 
+		Long customerId;
+		try {
+			customerId = Long.valueOf(id);
+		} catch (NumberFormatException ex) {
+			throw new InputValidationException("Invalid Request: "
+					+ "unable to parse customer id '" + id + "'");
+		}
 		DeliveryServiceFactory.getService().removeCustomer(customerId);
 
 	}
@@ -73,9 +85,16 @@ public class CustomerResource {
 	@GET
 	@Path("/{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public CustomerDtoJaxb findCustomerById(@PathParam("customerId") Long customerId)
+	public CustomerDtoJaxb findCustomerById(@PathParam("id") String id)
 			throws InputValidationException, InstanceNotFoundException {
 
+		Long customerId;
+		try {
+			customerId = Long.valueOf(id);
+		} catch (NumberFormatException ex) {
+			throw new InputValidationException("Invalid Request: "
+					+ "unable to parse customer id '" + id + "'");
+		}
 		Customer customer = DeliveryServiceFactory.getService().findCustomerById(customerId);
 
 		return CustomerToCustomerDtoJaxbConversor.toCustomerDtoJaxb(customer);
