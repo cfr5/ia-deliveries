@@ -33,8 +33,8 @@ public class CustomerResource {
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response addCustomer(@QueryParam("name") String name, @QueryParam("cif") String cif,
-			@QueryParam("address") String address, @Context UriInfo ui)
+	public Response addCustomer(@FormParam("name") String name, @FormParam("cif") String cif,
+			@FormParam("address") String address, @Context UriInfo ui)
 			throws InstanceNotFoundException, InputValidationException {
 
 		Customer customer = DeliveryServiceFactory.getService().addCustomer(name, cif, address);
@@ -52,8 +52,8 @@ public class CustomerResource {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{id}")
-	public void updateCustomer(@FormParam("customerId") Long customerId, @FormParam("name") String name,
-			@FormParam("cif") String cif, @FormParam("address") String address, @Context UriInfo ui)
+	public void updateCustomer(@PathParam("customerId") Long customerId, @QueryParam("name") String name,
+			@QueryParam("cif") String cif, @QueryParam("address") String address, @Context UriInfo ui)
 			throws InstanceNotFoundException, InputValidationException {
 
 		DeliveryServiceFactory.getService().updateCustomer(customerId, name, cif, address);
@@ -63,7 +63,7 @@ public class CustomerResource {
 	@DELETE
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{id}")
-	public void removeCustomer(@FormParam("customerId") Long customerId, @Context UriInfo ui)
+	public void removeCustomer(@PathParam("customerId") Long customerId, @Context UriInfo ui)
 			throws InstanceNotFoundException, InputValidationException, CustomerWithShipmentsException {
 
 		DeliveryServiceFactory.getService().removeCustomer(customerId);
