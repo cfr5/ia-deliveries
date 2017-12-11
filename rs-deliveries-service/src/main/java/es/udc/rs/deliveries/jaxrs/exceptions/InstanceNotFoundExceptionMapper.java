@@ -5,7 +5,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import es.udc.rs.deliveries.exceptions.InstanceNotFoundException;
-import es.udc.rs.deliveries.jaxrs.dto.shipment.InstanceNotFoundExceptionDtoJaxb;
+import es.udc.rs.deliveries.jaxrs.dto.customer.InstanceNotFoundExceptionDtoJaxb;
 
 @Provider
 public class InstanceNotFoundExceptionMapper implements ExceptionMapper<InstanceNotFoundException> {

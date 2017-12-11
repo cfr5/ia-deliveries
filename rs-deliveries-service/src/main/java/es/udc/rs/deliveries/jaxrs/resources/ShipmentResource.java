@@ -36,8 +36,8 @@ public class ShipmentResource {
 	@POST
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response addShipment(@QueryParam("customerId") Long customerId,
-			@QueryParam("packageReference") Long packageReference, @QueryParam("address") String address,
+	public Response addShipment(@FormParam("customerId") Long customerId,
+			@FormParam("packageReference") Long packageReference, @FormParam("address") String address,
 			@Context UriInfo ui) throws InputValidationException, InstanceNotFoundException {
 
 		Shipment shipment = DeliveryServiceFactory.getService().addShipment(customerId, packageReference, address);
@@ -55,8 +55,8 @@ public class ShipmentResource {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{id}")
-	public void updateShipmentState(@FormParam("shipmentId") Long shipmentId,
-			@FormParam("state") ShipmentStateDtoJaxb shipmentStateDto, @Context UriInfo ui)
+	public void updateShipmentState(@PathParam("shipmentId") Long shipmentId,
+			@QueryParam("state") ShipmentStateDtoJaxb shipmentStateDto, @Context UriInfo ui)
 			throws InputValidationException, InstanceNotFoundException, InvalidStateException {
 
 		ShipmentState shipmentState = ShipmentStateToShipmentStateDtoJaxbConversor.toShipmentState(shipmentStateDto);
@@ -65,16 +65,16 @@ public class ShipmentResource {
 
 	}
 
-//	@PUT
-//	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-//	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-//	@Path("/{id}")
-//	public void cancelShipmentState(@FormParam("shipmentId") Long shipmentId, @Context UriInfo ui)
-//			throws InputValidationException, InstanceNotFoundException, ShipmentNotPendingException {
-//
-//		DeliveryServiceFactory.getService().cancelShipment(shipmentId);
-//
-//	}
+	@POST
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Path("/{id}")
+	public void cancelShipmentState(@PathParam("shipmentId") Long shipmentId, @Context UriInfo ui)
+			throws InputValidationException, InstanceNotFoundException, ShipmentNotPendingException {
+
+		DeliveryServiceFactory.getService().cancelShipment(shipmentId);
+
+	}
 
 	@GET
 	@Path("/{id}")

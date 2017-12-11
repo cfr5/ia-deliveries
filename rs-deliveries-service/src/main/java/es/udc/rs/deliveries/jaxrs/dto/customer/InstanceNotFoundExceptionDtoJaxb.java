@@ -1,4 +1,4 @@
-package es.udc.rs.deliveries.jaxrs.dto.shipment;
+package es.udc.rs.deliveries.jaxrs.dto.customer;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

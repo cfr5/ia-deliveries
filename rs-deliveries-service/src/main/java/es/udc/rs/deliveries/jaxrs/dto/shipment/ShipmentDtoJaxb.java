@@ -4,9 +4,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import es.udc.rs.deliveries.model.shipment.ShipmentState;
+
+
 @XmlRootElement(name = "shipment")
 @XmlType(name = "shipmentType", propOrder = { "shipmentId", "customerId", "packageReference", "address", "state",
-		"creationDate", "maxDeliveryDate", "deliveryDate" })
+		"creationDate", "deliveryDate", "hoursToDelivery" })
 public class ShipmentDtoJaxb {
 
 	@XmlElement(required = true)
@@ -18,28 +21,29 @@ public class ShipmentDtoJaxb {
 	@XmlElement(required = true)
 	private String address;
 	@XmlElement(required = true)
-	private ShipmentStateDtoJaxb state;
+	private ShipmentState state;
 	@XmlElement(required = true)
 	private DateDtoJaxb creationDate;
 	@XmlElement(required = true)
-	private DateDtoJaxb maxDeliveryDate;
-	@XmlElement(required = true)
 	private DateDtoJaxb deliveryDate;
+	@XmlElement(required = true)
+	private Long hoursToDelivery;
 
-	public ShipmentDtoJaxb(){
-		
+	public ShipmentDtoJaxb() {
+
 	}
-	
-	public ShipmentDtoJaxb(Long shipmentId, Long customerId, Long packageReference, String address,
-			ShipmentStateDtoJaxb state, DateDtoJaxb creationDate, DateDtoJaxb maxDeliveryDate) {
+
+	public ShipmentDtoJaxb(Long shipmentId, Long customerId, Long packageReference, String address, ShipmentState state,
+			DateDtoJaxb creationDate, DateDtoJaxb deliveryDate, Long hoursToDelivery) {
 		super();
 		this.shipmentId = shipmentId;
 		this.customerId = customerId;
 		this.packageReference = packageReference;
 		this.address = address;
-		this.state = ShipmentStateDtoJaxb.PENDING;
+		this.state = state;
 		this.creationDate = creationDate;
-		this.maxDeliveryDate = maxDeliveryDate;
+		this.deliveryDate = deliveryDate;
+		this.hoursToDelivery = hoursToDelivery;
 	}
 
 	public Long getShipmentId() {
@@ -74,11 +78,11 @@ public class ShipmentDtoJaxb {
 		this.address = address;
 	}
 
-	public ShipmentStateDtoJaxb getState() {
+	public ShipmentState getState() {
 		return state;
 	}
 
-	public void setState(ShipmentStateDtoJaxb state) {
+	public void setState(ShipmentState state) {
 		this.state = state;
 	}
 
@@ -90,20 +94,20 @@ public class ShipmentDtoJaxb {
 		this.creationDate = creationDate;
 	}
 
-	public DateDtoJaxb getMaxDeliveryDate() {
-		return maxDeliveryDate;
-	}
-
-	public void setMaxDeliveryDate(DateDtoJaxb maxDeliveryDate) {
-		this.maxDeliveryDate = maxDeliveryDate;
-	}
-
 	public DateDtoJaxb getDeliveryDate() {
 		return deliveryDate;
 	}
 
 	public void setDeliveryDate(DateDtoJaxb deliveryDate) {
 		this.deliveryDate = deliveryDate;
+	}
+
+	public Long getHoursToDelivery() {
+		return hoursToDelivery;
+	}
+
+	public void setHoursToDelivery(Long hoursToDelivery) {
+		this.hoursToDelivery = hoursToDelivery;
 	}
 
 }

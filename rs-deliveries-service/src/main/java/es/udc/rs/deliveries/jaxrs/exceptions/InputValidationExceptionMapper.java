@@ -5,7 +5,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import es.udc.rs.deliveries.exceptions.InputValidationException;
-import es.udc.rs.deliveries.jaxrs.dto.shipment.InputValidationExceptionDtoJaxb;
+import es.udc.rs.deliveries.jaxrs.dto.customer.InputValidationExceptionDtoJaxb;
 
 @Provider
 public class InputValidationExceptionMapper implements ExceptionMapper<InputValidationException> {

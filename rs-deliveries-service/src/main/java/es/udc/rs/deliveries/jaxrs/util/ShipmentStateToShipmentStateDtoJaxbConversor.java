@@ -6,11 +6,11 @@ import es.udc.rs.deliveries.model.shipment.ShipmentState;
 public class ShipmentStateToShipmentStateDtoJaxbConversor {
 
 	public static ShipmentState toShipmentState(ShipmentStateDtoJaxb shipmentStateDto) {
-		return ShipmentState.valueOf(shipmentStateDto.name());
+		return shipmentStateDto.getShipmentState();
 	}
 
 	public static ShipmentStateDtoJaxb toShipmentStateDtoJaxb(ShipmentState state) {
-		return ShipmentStateDtoJaxb.valueOf(state.name());
+		return new ShipmentStateDtoJaxb(state);
 	}
 
 }
