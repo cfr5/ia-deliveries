@@ -1,11 +1,12 @@
 package es.udc.rs.deliveries.jaxrs.dto.shipment;
 
+import java.util.Calendar;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import es.udc.rs.deliveries.model.shipment.ShipmentState;
-
 
 @XmlRootElement(name = "shipment")
 @XmlType(name = "shipmentType", propOrder = { "shipmentId", "customerId", "packageReference", "address", "state",
@@ -23,9 +24,9 @@ public class ShipmentDtoJaxb {
 	@XmlElement(required = true)
 	private ShipmentState state;
 	@XmlElement(required = true)
-	private DateDtoJaxb creationDate;
+	private Calendar creationDate;
 	@XmlElement(required = true)
-	private DateDtoJaxb deliveryDate;
+	private Calendar deliveryDate;
 	@XmlElement(required = true)
 	private Long hoursToDelivery;
 
@@ -34,7 +35,7 @@ public class ShipmentDtoJaxb {
 	}
 
 	public ShipmentDtoJaxb(Long shipmentId, Long customerId, Long packageReference, String address, ShipmentState state,
-			DateDtoJaxb creationDate, DateDtoJaxb deliveryDate, Long hoursToDelivery) {
+			Calendar creationDate, Calendar deliveryDate, Long hoursToDelivery) {
 		super();
 		this.shipmentId = shipmentId;
 		this.customerId = customerId;
@@ -86,19 +87,19 @@ public class ShipmentDtoJaxb {
 		this.state = state;
 	}
 
-	public DateDtoJaxb getCreationDate() {
+	public Calendar getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(DateDtoJaxb creationDate) {
+	public void setCreationDate(Calendar creationDate) {
 		this.creationDate = creationDate;
 	}
 
-	public DateDtoJaxb getDeliveryDate() {
+	public Calendar getDeliveryDate() {
 		return deliveryDate;
 	}
 
-	public void setDeliveryDate(DateDtoJaxb deliveryDate) {
+	public void setDeliveryDate(Calendar deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 

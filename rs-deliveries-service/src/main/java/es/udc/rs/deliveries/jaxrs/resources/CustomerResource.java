@@ -31,7 +31,6 @@ import es.udc.rs.deliveries.model.deliveryservice.DeliveryServiceFactory;
 public class CustomerResource {
 
 	@POST
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response addCustomer(@FormParam("name") String name, @FormParam("cif") String cif,
 			@FormParam("address") String address, @Context UriInfo ui)

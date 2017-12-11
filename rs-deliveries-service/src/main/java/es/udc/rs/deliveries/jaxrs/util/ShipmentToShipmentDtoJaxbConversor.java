@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import es.udc.rs.deliveries.jaxrs.dto.shipment.DateDtoJaxb;
 import es.udc.rs.deliveries.jaxrs.dto.shipment.ShipmentDtoJaxb;
 import es.udc.rs.deliveries.jaxrs.dto.shipment.ShipmentDtoJaxbList;
 import es.udc.rs.deliveries.model.shipment.Shipment;
@@ -18,11 +17,8 @@ public class ShipmentToShipmentDtoJaxbConversor {
 
 	public static ShipmentDtoJaxb toShipmentDtoJaxb(Shipment shipment) {
 
-		DateDtoJaxb creationDate = CalendarToCalendarDtoJaxbConversor.toDateDtoJaxb(shipment.getCreationDate());
-		DateDtoJaxb deliveryDate = CalendarToCalendarDtoJaxbConversor.toDateDtoJaxb(shipment.getDeliveryDate());
-
 		return new ShipmentDtoJaxb(shipment.getShipmentId(), shipment.getCustomerId(), shipment.getPackageReference(),
-				shipment.getAddress(), shipment.getState(), creationDate, deliveryDate,
+				shipment.getAddress(), shipment.getState(), shipment.getCreationDate(), shipment.getDeliveryDate(),
 				hoursToDelivery(shipment.getMaxDeliveryDate()));
 	}
 

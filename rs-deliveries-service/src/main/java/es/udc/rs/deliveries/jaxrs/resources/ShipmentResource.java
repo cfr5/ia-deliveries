@@ -3,7 +3,6 @@ package es.udc.rs.deliveries.jaxrs.resources;
 import java.net.URI;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -23,8 +22,6 @@ import es.udc.rs.deliveries.exceptions.InvalidStateException;
 import es.udc.rs.deliveries.exceptions.ShipmentNotPendingException;
 import es.udc.rs.deliveries.jaxrs.dto.shipment.ShipmentDtoJaxb;
 import es.udc.rs.deliveries.jaxrs.dto.shipment.ShipmentDtoJaxbList;
-import es.udc.rs.deliveries.jaxrs.dto.shipment.ShipmentStateDtoJaxb;
-import es.udc.rs.deliveries.jaxrs.util.ShipmentStateToShipmentStateDtoJaxbConversor;
 import es.udc.rs.deliveries.jaxrs.util.ShipmentToShipmentDtoJaxbConversor;
 import es.udc.rs.deliveries.model.deliveryservice.DeliveryServiceFactory;
 import es.udc.rs.deliveries.model.shipment.Shipment;
@@ -34,7 +31,6 @@ import es.udc.rs.deliveries.model.shipment.ShipmentState;
 public class ShipmentResource {
 
 	@POST
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public Response addShipment(@FormParam("customerId") Long customerId,
 			@FormParam("packageReference") Long packageReference, @FormParam("address") String address,
@@ -52,53 +48,65 @@ public class ShipmentResource {
 	}
 
 	@PUT
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Path("/{id}")
-	public void updateShipmentState(@PathParam("shipmentId") Long shipmentId,
-			@QueryParam("state") ShipmentStateDtoJaxb shipmentStateDto, @Context UriInfo ui)
+	@Path("/{shipmentId}")
+	public void updateShipmentState(@PathParam("shipmentId") String shipmentId,
+			@FormParam("state") String shipmentState, @Context UriInfo ui)
 			throws InputValidationException, InstanceNotFoundException, InvalidStateException {
 
-		ShipmentState shipmentState = ShipmentStateToShipmentStateDtoJaxbConversor.toShipmentState(shipmentStateDto);
-
-		DeliveryServiceFactory.getService().updateShipmentState(shipmentId, shipmentState);
+		try {
+			DeliveryServiceFactory.getService().updateShipmentState(Long.parseLong(shipmentId),
+					ShipmentState.valueOf(shipmentState));
+		} catch (NumberFormatException e) {
+			throw new InputValidationException("Invalid Request: unable to parse shipment id '" + shipmentId + "'");
+		} catch (IllegalArgumentException e) {
+			throw new InputValidationException(
+					"Invalid Request: unable to parse shipment state'" + shipmentState + "'");
+		}
 
 	}
 
 	@POST
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Path("/{id}")
-	public void cancelShipmentState(@PathParam("shipmentId") Long shipmentId, @Context UriInfo ui)
+	@Path("/{shipmentId}")
+	public void cancelShipmentState(@PathParam("shipmentId") String shipmentId, @Context UriInfo ui)
 			throws InputValidationException, InstanceNotFoundException, ShipmentNotPendingException {
 
-		DeliveryServiceFactory.getService().cancelShipment(shipmentId);
-
+		try {
+			DeliveryServiceFactory.getService().cancelShipment(Long.parseLong(shipmentId));
+		} catch (NumberFormatException e) {
+			throw new InputValidationException("Invalid Request: unable to parse shipment id '" + shipmentId + "'");
+		}
 	}
 
 	@GET
-	@Path("/{id}")
+	@Path("/{shipmentId}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public ShipmentDtoJaxb findShipmentById(@PathParam("shipmentId") Long shipmentId)
+	public ShipmentDtoJaxb findShipmentById(@PathParam("shipmentId") String shipmentId)
 			throws InputValidationException, InstanceNotFoundException {
 
-		Shipment shipment = DeliveryServiceFactory.getService().findShipmentById(shipmentId);
-
-		return ShipmentToShipmentDtoJaxbConversor.toShipmentDtoJaxb(shipment);
+		try {
+			Shipment shipment = DeliveryServiceFactory.getService().findShipmentById(Long.parseLong(shipmentId));
+			return ShipmentToShipmentDtoJaxbConversor.toShipmentDtoJaxb(shipment);
+		} catch (NumberFormatException e) {
+			throw new InputValidationException("Invalid Request: unable to parse shipment id '" + shipmentId + "'");
+		}
 
 	}
 
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public ShipmentDtoJaxbList findShipmentsByCustomer(@QueryParam("customerId") Long customerId,
+	public ShipmentDtoJaxbList findShipmentsByCustomer(@QueryParam("customerId") String customerId,
 			@QueryParam("start") Long start, @QueryParam("count") Long count, @Context UriInfo ui)
 			throws InputValidationException {
 
-		List<Shipment> shipments = DeliveryServiceFactory.getService().findShipmentsByCustomer(customerId, start,
-				count);
-
-		return ShipmentToShipmentDtoJaxbConversor.toShipmentDtoJaxbList(shipments);
-
+		try {
+			List<Shipment> shipments = DeliveryServiceFactory.getService()
+					.findShipmentsByCustomer(Long.parseLong(customerId), start, count);
+			return ShipmentToShipmentDtoJaxbConversor.toShipmentDtoJaxbList(shipments);
+		} catch (NumberFormatException e) {
+			throw new InputValidationException("Invalid Request: unable to parse customer id '" + customerId + "'");
+		}
 	}
 
 }

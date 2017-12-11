@@ -1,36 +1,36 @@
 package es.udc.rs.deliveries.jaxrs.dto.customer;
 
+import java.util.Calendar;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import es.udc.rs.deliveries.jaxrs.dto.shipment.DateDtoJaxb;
-
-@XmlRootElement(name="customer")
-@XmlType(name="customerType", propOrder = {"customerId", "name", "Cif", "address","creationDate"})
+@XmlRootElement(name = "customer")
+@XmlType(name = "customerType", propOrder = { "customerId", "name", "Cif", "address", "creationDate" })
 public class CustomerDtoJaxb {
 
 	@XmlElement(required = true)
-    private Long customerId;
+	private Long customerId;
 	@XmlElement(required = true)
-    private String name;
+	private String name;
 	@XmlElement(required = true)
-    private String Cif;
+	private String Cif;
 	@XmlElement(required = true)
 	private String address;
 	@XmlElement(required = true)
-    private DateDtoJaxb creationDate;
-    
+	private Calendar creationDate;
+
 	public CustomerDtoJaxb() {
-    } 
-	
-	public CustomerDtoJaxb(Long customerId, String name, String cif, String address, DateDtoJaxb creationDate) {
+	}
+
+	public CustomerDtoJaxb(Long customerId, String name, String cif, String address, Calendar calendar) {
 		super();
 		this.customerId = customerId;
 		this.name = name;
 		this.Cif = cif;
 		this.address = address;
-		this.creationDate = creationDate;
+		this.creationDate = calendar;
 	}
 
 	public Long getCustomerId() {
@@ -65,11 +65,11 @@ public class CustomerDtoJaxb {
 		this.address = address;
 	}
 
-	public DateDtoJaxb getCreationDate() {
+	public Calendar getCreationDate() {
 		return creationDate;
 	}
 
-	public void setCreationDate(DateDtoJaxb creationDate) {
+	public void setCreationDate(Calendar creationDate) {
 		this.creationDate = creationDate;
 	}
 
