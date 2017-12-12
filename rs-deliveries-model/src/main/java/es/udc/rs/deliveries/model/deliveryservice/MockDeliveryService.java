@@ -178,14 +178,17 @@ public class MockDeliveryService implements DeliveryService {
 
 		ShipmentState currentState = shipment.getState();
 
-		if (((newState == ShipmentState.SENT) && (currentState != ShipmentState.PENDING))
-				|| ((newState == ShipmentState.DELIVERED) && (currentState != ShipmentState.SENT)))
+		if ((newState == ShipmentState.CANCELLED && currentState == ShipmentState.PENDING)
+				|| (newState == ShipmentState.SENT && currentState == ShipmentState.PENDING)
+				|| (newState == ShipmentState.DELIVERED && currentState == ShipmentState.SENT)
+				|| (newState == ShipmentState.REJECTED && currentState == ShipmentState.SENT)) {
+			shipment.setState(newState);
+		} else {
 			throw new InvalidStateException(currentState.toString(), newState.toString());
+		}
 
 		if (newState == ShipmentState.DELIVERED)
 			shipment.setDeliveryDate(Calendar.getInstance());
-
-		shipment.setState(newState);
 
 		return shipment;
 	}
@@ -193,12 +196,12 @@ public class MockDeliveryService implements DeliveryService {
 	@Override
 	public void cancelShipment(Long shipmentId)
 			throws InputValidationException, InstanceNotFoundException, ShipmentNotPendingException {
-		
+
 		if (shipmentId == null)
 			throw new InputValidationException("'shipmentId' can not be null");
 
 		PropertyValidator.validateLong("shipmentId", shipmentId, MININT, MAXINT);
-		
+
 		Shipment shipment = shipmentsMap.get(shipmentId);
 
 		if (shipment == null)
