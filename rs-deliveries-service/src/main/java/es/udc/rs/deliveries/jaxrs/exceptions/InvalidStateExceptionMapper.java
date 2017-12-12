@@ -12,7 +12,7 @@ public class InvalidStateExceptionMapper implements ExceptionMapper<InvalidState
 
 	@Override
 	public Response toResponse(InvalidStateException ex) {
-		return Response.status(Response.Status.BAD_REQUEST).entity(new InvalidStateExceptionDtoJaxb()).build();
+		return Response.status(Response.Status.FORBIDDEN).entity(new InvalidStateExceptionDtoJaxb()).build();
 
 	}
 

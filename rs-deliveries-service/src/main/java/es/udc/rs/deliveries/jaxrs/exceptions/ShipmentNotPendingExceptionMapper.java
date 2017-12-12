@@ -12,7 +12,7 @@ public class ShipmentNotPendingExceptionMapper implements ExceptionMapper<Shipme
 
 	@Override
 	public Response toResponse(ShipmentNotPendingException ex) {
-		return Response.status(Response.Status.BAD_REQUEST).entity(new ShipmentNotPendingExceptionDtoJaxb()).build();
+		return Response.status(Response.Status.UNAUTHORIZED).entity(new ShipmentNotPendingExceptionDtoJaxb()).build();
 
 	}
 
