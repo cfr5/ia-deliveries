@@ -4,12 +4,17 @@ import java.util.List;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import es.udc.rs.deliveries.client.service.ClientDeliveryService;
 import es.udc.rs.deliveries.client.service.rest.dto.shipment.ClientShipmentDto;
 import es.udc.rs.deliveries.client.service.rest.dto.shipment.ClientShipmentStateDto;
+import es.udc.rs.deliveries.exceptions.InputValidationException;
+import es.udc.rs.deliveries.exceptions.InstanceNotFoundException;
 import es.udc.ws.util.configuration.ConfigurationParametersManager;
 
 public abstract class RestClientDeliveryService implements ClientDeliveryService {
@@ -45,13 +50,45 @@ public abstract class RestClientDeliveryService implements ClientDeliveryService
 
 	@Override
 	public Long addCustomer(String name, String Cif, String address) {
-		// TODO Auto-generated method stub
-		return null;
+		WebTarget wt = getEndpointWebTarget().path("customers");
+		Form form = new Form();
+		form.param("name", name);
+		form.param("Cif", Cif);
+		form.param("address", address);
+
+		Response response = wt.request().accept(this.getMediaType()).post(Entity.form(form));
+		return 0l;
+//		try {
+//			//validateResponse(Response.Status.CREATED.getStatusCode(), response);
+//			CustomerDtoJaxb customer = response.readEntity(CustomerDtoJaxb.class);
+//			return customer.getCustomerId();
+//		} catch (InputValidationException | InstanceNotFoundException ex) {
+//			throw ex;
+//		} catch (Exception ex) {
+//			throw new RuntimeException(ex);
+//		} finally {
+//			if (response != null) {
+//				response.close();
+//			}
+//		}
 	}
 
 	@Override
-	public void deleteCustomer(Long parseLong) {
-		// TODO Auto-generated method stub
+	public void deleteCustomer(Long customerId) {
+		WebTarget wt = getEndpointWebTarget().path("customers/{id}").resolveTemplate("id", customerId);
+		Response response = wt.request().accept(this.getMediaType()).delete();
+		response.close();
+//		try {
+//			//validateResponse(Response.Status.NO_CONTENT.getStatusCode(), response);
+//		} catch (InstanceNotFoundException ex) {
+//			throw ex;
+//		} catch (Exception ex) {
+//			throw new RuntimeException(ex);
+//		} finally {
+//			if (response != null) {
+//				response.close();
+//			}
+//		}
 
 	}
 

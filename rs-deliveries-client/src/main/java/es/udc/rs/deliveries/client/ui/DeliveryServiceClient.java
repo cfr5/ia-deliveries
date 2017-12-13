@@ -21,7 +21,7 @@ public class DeliveryServiceClient {
 		}
 		ClientDeliveryService clientDeliveryService = ClientDeliveryServiceFactory.getService();
 		if ("-addCustomer".equalsIgnoreCase(args[0])) {
-			validateArgs(args, 3, new int[] {});
+			validateArgs(args, 4, new int[] {});
 
 			// [-addCustomer] DeliveryServiceClient -addCustomer <name> <Cif> <address>
 
@@ -48,7 +48,7 @@ public class DeliveryServiceClient {
 			}
 
 		} else if ("-deleteCustomer".equalsIgnoreCase(args[0])) {
-			validateArgs(args, 1, new int[] { 1 });
+			validateArgs(args, 2, new int[] { 1 });
 
 			// [-deleteCustomer] ClientDeliveryServiceClient -deleteCustomer <customerId>
 
@@ -61,7 +61,7 @@ public class DeliveryServiceClient {
 			}
 
 		} else if ("-changeState".equalsIgnoreCase(args[0])) {
-			validateArgs(args, 2, new int[] { 1 });
+			validateArgs(args, 3, new int[] { 1 });
 
 			// [-changeState] ClientDeliveryServiceClient -changeState <shipmentId1> <newstate>
 
@@ -94,8 +94,12 @@ public class DeliveryServiceClient {
 	}
 
 	public static void printUsage() {
-		System.err.println("Usage:\n" + "    [-addCustomer]    DeliveryServiceClient -addCustomer <name> ...\n"
-				+ "    [-findCustomer]   DeliveryServiceClient -findCustomer <customerId>\n" + "    ...\n");
+		System.err.println("Usage:\n" + "    [-addCustomer]    DeliveryServiceClient -addCustomer <name> <cif> <address>\n"
+				+ "    [-findByCustomer]   DeliveryServiceClient -findByCustomer <customerId> [<initialvalue> <amount>]\n"
+				+ "    [-changeState]   DeliveryServiceClient -changeState <shipmentId> <newState>\n"
+				+ "    [-deleteCustomer]   DeliveryServiceClient -deleteCustomer <customerId>\n"
+
+				);
 	}
 
 }
