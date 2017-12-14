@@ -10,21 +10,21 @@ import javax.xml.bind.annotation.XmlType;
 public class CustomerWithShipmentsExceptionDtoJaxb {
 
 	@XmlElement(required = true)
-	private String message;
+	private Long customerId;
 
 	public CustomerWithShipmentsExceptionDtoJaxb() {
 	}
 
-	public CustomerWithShipmentsExceptionDtoJaxb(String message) {
-		this.message = message;
+	public CustomerWithShipmentsExceptionDtoJaxb(Long customerId) {
+		this.customerId = customerId;
 	}
 
-	public String getMessage() {
-		return message;
+	public Long getCustomerId() {
+		return customerId;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setMessage(Long customerId) {
+		this.customerId = customerId;
 	}
 
 }

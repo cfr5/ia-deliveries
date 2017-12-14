@@ -23,7 +23,8 @@ public class DeliveryServiceClient {
 		if ("-addCustomer".equalsIgnoreCase(args[0])) {
 			validateArgs(args, 4, new int[] {});
 
-			// [-addCustomer] DeliveryServiceClient -addCustomer <name> <Cif> <address>
+			// [-addCustomer] DeliveryServiceClient -addCustomer <name> <Cif>
+			// <address>
 
 			try {
 				Long customerId = clientDeliveryService.addCustomer(args[1], args[2], args[3]);
@@ -33,9 +34,9 @@ public class DeliveryServiceClient {
 			}
 
 		} else if ("-findByCustomer".equalsIgnoreCase(args[0])) {
-			validateArgs(args, 2, new int[] { 1 });
-
-			// [-findByCustomer] ClientDeliveryServiceClient -findByCustomer <customerId> <start> <amount>
+			validateArgs(args, 4, new int[] {});
+			// [-findByCustomer] ClientDeliveryServiceClient -findByCustomer
+			// <customerId> <start> <amount>
 
 			try {
 				List<ClientShipmentDto> shipments = clientDeliveryService.findByCustomer(Long.parseLong(args[1]),
@@ -50,7 +51,8 @@ public class DeliveryServiceClient {
 		} else if ("-deleteCustomer".equalsIgnoreCase(args[0])) {
 			validateArgs(args, 2, new int[] { 1 });
 
-			// [-deleteCustomer] ClientDeliveryServiceClient -deleteCustomer <customerId>
+			// [-deleteCustomer] ClientDeliveryServiceClient -deleteCustomer
+			// <customerId>
 
 			try {
 				clientDeliveryService.deleteCustomer(Long.parseLong(args[1]));
@@ -63,10 +65,11 @@ public class DeliveryServiceClient {
 		} else if ("-changeState".equalsIgnoreCase(args[0])) {
 			validateArgs(args, 3, new int[] { 1 });
 
-			// [-changeState] ClientDeliveryServiceClient -changeState <shipmentId1> <newstate>
+			// [-changeState] ClientDeliveryServiceClient -changeState
+			// <shipmentId1> <newstate>
 
 			try {
-				clientDeliveryService.changeState(Long.parseLong(args[1]),ClientShipmentStateDto.valueOf(args[2]));
+				clientDeliveryService.changeState(Long.parseLong(args[1]), ClientShipmentStateDto.valueOf(args[2]));
 			} catch (Exception ex) {
 				ex.printStackTrace(System.err);
 			}
@@ -94,12 +97,13 @@ public class DeliveryServiceClient {
 	}
 
 	public static void printUsage() {
-		System.err.println("Usage:\n" + "    [-addCustomer]    DeliveryServiceClient -addCustomer <name> <cif> <address>\n"
-				+ "    [-findByCustomer]   DeliveryServiceClient -findByCustomer <customerId> [<initialvalue> <amount>]\n"
-				+ "    [-changeState]   DeliveryServiceClient -changeState <shipmentId> <newState>\n"
-				+ "    [-deleteCustomer]   DeliveryServiceClient -deleteCustomer <customerId>\n"
+		System.err.println(
+				"Usage:\n" + "    [-addCustomer]    DeliveryServiceClient -addCustomer <name> <cif> <address>\n"
+						+ "    [-findByCustomer]   DeliveryServiceClient -findByCustomer <customerId> [<initialvalue> <amount>]\n"
+						+ "    [-changeState]   DeliveryServiceClient -changeState <shipmentId> <newState>\n"
+						+ "    [-deleteCustomer]   DeliveryServiceClient -deleteCustomer <customerId>\n"
 
-				);
+		);
 	}
 
 }

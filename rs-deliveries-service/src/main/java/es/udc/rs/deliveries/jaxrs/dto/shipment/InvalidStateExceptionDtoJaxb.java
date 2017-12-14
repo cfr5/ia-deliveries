@@ -5,25 +5,28 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "InvalidStateException")
-@XmlType(name = "invalidStateExceptionType")
+@XmlType(name = "invalidStateExceptionType", propOrder = { "currentState", "newState" })
 public class InvalidStateExceptionDtoJaxb {
 
 	@XmlElement(required = true)
-	private String message;
+	private String currentState;
+	@XmlElement(required = true)
+	private String newState;
 
 	public InvalidStateExceptionDtoJaxb() {
 	}
 
-	public InvalidStateExceptionDtoJaxb(String message) {
-		this.message = message;
+	public InvalidStateExceptionDtoJaxb(String currentState, String newState) {
+		this.currentState = currentState;
+		this.newState = newState;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getCurrentState() {
+		return currentState;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public String getNewState() {
+		return newState;
 	}
 
 }

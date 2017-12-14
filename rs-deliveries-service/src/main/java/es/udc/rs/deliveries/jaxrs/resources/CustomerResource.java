@@ -35,7 +35,7 @@ public class CustomerResource {
 	public Response addCustomer(@FormParam("name") String name, @FormParam("cif") String cif,
 			@FormParam("address") String address, @Context UriInfo ui)
 			throws InstanceNotFoundException, InputValidationException {
-
+		System.out.println(name);System.out.println(cif);System.out.println(address);
 		Customer customer = DeliveryServiceFactory.getService().addCustomer(name, cif, address);
 
 		CustomerDtoJaxb customerDto = CustomerToCustomerDtoJaxbConversor.toCustomerDtoJaxb(customer);

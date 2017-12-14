@@ -9,21 +9,21 @@ import javax.xml.bind.annotation.XmlType;
 public class ShipmentNotPendingExceptionDtoJaxb {
 
 	@XmlElement(required = true)
-	private String message;
+	private Long shipmentId;
 
 	public ShipmentNotPendingExceptionDtoJaxb() {
 	}
 
-	public ShipmentNotPendingExceptionDtoJaxb(String message) {
-		this.message = message;
+	public ShipmentNotPendingExceptionDtoJaxb(Long shipmentId) {
+		this.shipmentId = shipmentId;
 	}
 
-	public String getMessage() {
-		return message;
+	public Long getMessage() {
+		return shipmentId;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setMessage(Long shipmentId) {
+		this.shipmentId = shipmentId;
 	}
 
 }
