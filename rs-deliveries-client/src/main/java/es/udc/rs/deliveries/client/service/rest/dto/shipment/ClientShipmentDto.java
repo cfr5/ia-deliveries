@@ -2,21 +2,19 @@ package es.udc.rs.deliveries.client.service.rest.dto.shipment;
 
 import java.util.Calendar;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-
 public class ClientShipmentDto {
 
 	private Long shipmentId;
 	private Long customerId;
 	private Long packageReference;
 	private String address;
-	private ShipmentStateClientDto state;
+	private ClientShipmentStateDto state;
 	private Calendar creationDate;
 	private Calendar deliveryDate;
 	private Long hoursToDelivery;
 
 	public ClientShipmentDto(Long shipmentId, Long customerId, Long packageReference, String address,
-			ShipmentStateClientDto state, Calendar creationDate, Calendar deliveryDate, Long hoursToDelivery) {
+			ClientShipmentStateDto state, Calendar creationDate, Calendar deliveryDate, Long hoursToDelivery) {
 		super();
 		this.shipmentId = shipmentId;
 		this.customerId = customerId;
@@ -60,11 +58,11 @@ public class ClientShipmentDto {
 		this.address = address;
 	}
 
-	public ShipmentStateClientDto getState() {
+	public ClientShipmentStateDto getState() {
 		return state;
 	}
 
-	public void setState(ShipmentStateClientDto state) {
+	public void setState(ClientShipmentStateDto state) {
 		this.state = state;
 	}
 
