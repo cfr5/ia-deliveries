@@ -70,6 +70,7 @@ public class DeliveryServiceClient {
 
 			try {
 				clientDeliveryService.changeState(Long.parseLong(args[1]), ClientShipmentStateDto.valueOf(args[2]));
+				System.out.println("Shipment " + args[1] + " state updated sucessfully to "+args[2]);
 			} catch (Exception ex) {
 				ex.printStackTrace(System.err);
 			}

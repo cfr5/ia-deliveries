@@ -55,8 +55,6 @@ public class ShipmentResource {
 			throws InputValidationException, InstanceNotFoundException, InvalidStateException {
 
 		try {
-			System.out.println(Long.parseLong(shipmentId));
-			System.out.println(ShipmentState.valueOf(shipmentState));
 			DeliveryServiceFactory.getService().updateShipmentState(Long.parseLong(shipmentId),
 					ShipmentState.valueOf(shipmentState));
 		} catch (NumberFormatException e) {

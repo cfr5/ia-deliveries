@@ -12,7 +12,7 @@ public class CustomerWithShipmentsExceptionMapper implements ExceptionMapper<Cus
 
 	@Override
 	public Response toResponse(CustomerWithShipmentsException ex) {
-		return Response.status(Response.Status.CONFLICT).entity(new CustomerWithShipmentsExceptionDtoJaxb()).build();
+		return Response.status(Response.Status.CONFLICT).entity(new CustomerWithShipmentsExceptionDtoJaxb(ex.getCustomerId())).build();
 
 	}
 

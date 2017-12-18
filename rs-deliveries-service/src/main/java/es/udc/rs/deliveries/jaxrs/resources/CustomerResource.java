@@ -3,7 +3,6 @@ package es.udc.rs.deliveries.jaxrs.resources;
 import java.net.URI;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -35,7 +34,6 @@ public class CustomerResource {
 	public Response addCustomer(@FormParam("name") String name, @FormParam("cif") String cif,
 			@FormParam("address") String address, @Context UriInfo ui)
 			throws InstanceNotFoundException, InputValidationException {
-		System.out.println(name);System.out.println(cif);System.out.println(address);
 		Customer customer = DeliveryServiceFactory.getService().addCustomer(name, cif, address);
 
 		CustomerDtoJaxb customerDto = CustomerToCustomerDtoJaxbConversor.toCustomerDtoJaxb(customer);

@@ -1,5 +1,7 @@
+
 package es.udc.rs.deliveries.client.service.rest.dto.shipment;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class ClientShipmentDto {
@@ -88,6 +90,33 @@ public class ClientShipmentDto {
 
 	public void setHoursToDelivery(Long hoursToDelivery) {
 		this.hoursToDelivery = hoursToDelivery;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sBuilder = new StringBuilder();
+
+		sBuilder.append("ShipmentId: " + this.shipmentId);
+		sBuilder.append("\n\tCustomerId: " + this.customerId);
+		sBuilder.append("\n\tPackageReference: " + this.packageReference);
+		sBuilder.append("\n\tAddress: " + this.address);
+		sBuilder.append("\n\tState: " + this.state.name());
+		sBuilder.append("\n\tCreationDate: " + this.formatCalendar(this.creationDate));
+		sBuilder.append("\n\tDeliveryDate: " + this.formatCalendar(this.deliveryDate));
+		sBuilder.append("\n\tHoursToDelivery: " + this.hoursToDelivery);
+		sBuilder.append("\n");
+
+		return new String(sBuilder);
+	}
+
+	private String formatCalendar(Calendar date) {
+
+		if (date == null) {
+			return "";
+		}
+
+		SimpleDateFormat formater = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
+		return formater.format(date.getTime());
 	}
 
 }
