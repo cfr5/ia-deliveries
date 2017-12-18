@@ -34,9 +34,9 @@
 
 - FindByCustomer
 
-	mvn exec:java -Dexec.mainClass="es.udc.rs.deliveries.client.ui.DeliveryServiceClient" -Dexec.args="-findByCustomer 1 1 2"
+	mvn exec:java -Dexec.mainClass="es.udc.rs.deliveries.client.ui.DeliveryServiceClient" -Dexec.args="-findByCustomer 1 0 2"
 
-	mvn exec:java -Dexec.mainClass="es.udc.rs.deliveries.client.ui.DeliveryServiceClient" -Dexec.args="-findByCustomer 1 1 10"
+	mvn exec:java -Dexec.mainClass="es.udc.rs.deliveries.client.ui.DeliveryServiceClient" -Dexec.args="-findByCustomer 1 0 10"
 
 - DeleteCustomer
 
