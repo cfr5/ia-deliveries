@@ -32,8 +32,8 @@ public class ShipmentResource {
 
 	@POST
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Response addShipment(@FormParam("customerId") Long customerId,
-			@FormParam("packageReference") Long packageReference, @FormParam("address") String address,
+	public Response addShipment(@QueryParam("customerId") Long customerId,
+			@QueryParam("packageReference") Long packageReference, @QueryParam("address") String address,
 			@Context UriInfo ui) throws InputValidationException, InstanceNotFoundException {
 
 		Shipment shipment = DeliveryServiceFactory.getService().addShipment(customerId, packageReference, address);
